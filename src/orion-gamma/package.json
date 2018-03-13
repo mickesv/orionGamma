@@ -1,0 +1,27 @@
+{
+  "name": "orion-gamma",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "devstart": "nodemon -L ./bin/www"
+  },
+  "dependencies": {
+    "api-npm": "^1.0.0",
+    "async": "^2.6.0",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "dateformat": "^3.0.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "github-api": "^3.0.0",
+    "mongoose": "^5.0.9",
+    "morgan": "~1.9.0",
+    "pug": "2.0.0-beta11",
+    "rubygems": "^1.0.3",
+    "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  }
+}

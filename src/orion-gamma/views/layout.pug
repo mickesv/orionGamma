@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(defer, src='https://use.fontawesome.com/releases/v5.0.8/js/all.js')
+
+  body
+    .Logo
+      img.image(src='/images/orion-gamma.png')
+    .LogoSpacer
+
+    block content
+
+    .Footer
+      | #{title} is a part of the 
+      a(href='http://orion-research.se/') Orion Research Project
+      | , and is brought to you by Mikael Svahnberg [
+      a(href='https://scholar.google.se/citations?user=Tiuv4GoAAAAJ&hl=en&oi=ao') Google Scholar
+      | , 
+      a(href='https://bitbucket.org/mickesv/') Bitbucket
+      | , 
+      a(href='https://github.com/mickesv') Github
+      | ]

@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+  script(src='/javascripts/main.js')
+
+  h1= title
+  .ProjectInfo
+    p Welcome to #{title}.
+    p #{title} is a OSS component searcher. It will try to find the project/component you are searching for and display stats about it. The purpose is to enable an informed decision on which components to use in a project based on relevant component characteristica.
+  .OrionInfo
+    | #{title} is produced as part of the 
+    a(href='http://orion-research.se/') Orion Research Project
+    | . This project addresses the following scientific challenge: 
+    blockquote How to make decisions successfully for efficiently using software components or services from different sources to develop competitive software-intensive systems in relation to the trade-off between functionality, time to market, cost, quality, legacy and risk? 
+    | The project addresses development of software intensive products and services, including new development and building on existing assets (systems, components, platforms, etc.).
+  .SearchBox
+    script.
+      handlers='#{handlers}';
+    span.label Search for Component or Project: 
+    input#search(type='search', placeholder='component or project Name')
+  .SearchHandlers
+    h2 Searching in:
+    each handler in handlers
+      span(id='Container' + handler)
+        img#searchLogo(src='/images/' + handler + '.png')
+        span(id='Status' + handler)
+  .SearchResults
+    h2#Results
+    each handler in handlers
+      div(id='Results' + handler)
+        h3(id='ResultsSection' + handler)
+        div(id=handler)
+    
+    

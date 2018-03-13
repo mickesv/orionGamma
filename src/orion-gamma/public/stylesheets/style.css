@@ -1,0 +1,82 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+blockquote {
+    font-style: italic;
+}
+
+.Logo {
+    height: 80px;
+    position: fixed;
+    width: 100%;
+    padding: 5px;
+    padding-left: 10px;
+    top: 0px;
+    left: 0px;
+    background-color: #FFFFFF;
+}
+
+.LogoSpacer {
+    height: 50px;    
+}
+
+.Footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1em;
+  background-color: #efefef;
+  text-align: center;
+}
+
+.ProjectInfo {
+    box-sizing: content-box;
+    margin-bottom: 0.5em;
+    padding: 10px
+    
+}
+
+.OrionInfo {
+    box-sizing: content-box;
+    margin-bottom: 0.5em;
+    padding: 10px
+}
+
+.SearchBox {
+    text-align: center;
+    box-sizing: content-box;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #F0F0FF;
+    margin: 50px;
+    padding: 10px;
+    line-height: 2;
+}
+
+.SearchHeader {
+    box-sizing: content-box;
+    margin-bottom: 0.5em;
+    padding: 10px
+}               
+
+#search {
+    text-align: center;
+    width: 80%;
+    height: 2em;
+    border-radius:5px;
+}
+
+#searchLogo {
+    height: 50px;
+}
+
+#searchSpinner {
+    font-size: 30px;
+}

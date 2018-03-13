@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .ComponentHeader
+    h1 Component Name: #{componentName}
+  .ComponentDetails
+    p Origin: #{data.origin}
+    ul
+      li Description: #{data.description}
+      li Author: #{data.author} 
+        a(href='mailto:'+data.authorContact) #{data.authorContact}
+      li License: #{data.license}
+      li Homepage: 
+        a(href=data.homepage) #{data.homepage}
+      li Repository:  
+        a(href=data.repository) #{data.repository}
+      li Versions: #{data.versions}
+      li Last version: #{data.lastVersion}, at date #{data.lastVersionDate}
+
+        
+        
