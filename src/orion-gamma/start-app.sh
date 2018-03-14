@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-DEBUG=orion-gamma:* npm start devstart
+DEBUG=orion-gamma:* npm run devstart
