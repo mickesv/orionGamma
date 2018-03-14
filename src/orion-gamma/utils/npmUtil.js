@@ -43,8 +43,8 @@ module.exports.search = function(name, callback) {
                     origin: 'npm',
                     name: elem.package.name,
                     description: elem.package.description,
-                    url: '/component/npm/' + elem.package.name,
-                    npm: elem.package.links.npm
+                    url: '/component/npm/?q=' + elem.package.name,
+                    originUrl: elem.package.links.npm
                 });
             });
         }
@@ -59,7 +59,7 @@ module.exports.getDetails = function(name, callback) {
         var result={
             origin: 'npm',
             name: name,
-            url: '/component/npm/' + name
+            url: '/component/npm/?q=' + name
         };
         if (!data.error) {
             var res= {

@@ -7,35 +7,21 @@ module.exports.search = function(name, callback) {
 
     api.search({q: name}).forRepositories({}, function(err, res, req) {
         var result = [];
+        debug(res[0]);        
         if (!err) {
-            res.forEach(function (r) {
+            res.forEach(function (elem) {
                 result.push({
                     origin: 'github',
-                    name: r.name
+                    name: elem.full_name,
+                    description: elem.description,
+                    url: '/component/github/?q=' + elem.full_name,
+                    originUrl: elem.html_url
                 });
             });
         };
         
         callback(err, result);
-    });    
-    
-
-    
-    // return api.getstat(name, '1970-01-01', dateFormat(Date.now(), 'yyyy-mm-dd'), function(data) {
-    //     var result={};
-    //     debug(data);
-        
-    //     if (!data.error) {        
-            
-    //         result={
-    //             origin: 'npm',
-    //             name: data.package,
-    //             url: '/component/npm/' + data.package
-    //         };
-    //     }
-        
-    //     callback(null, result);
-    // });
+    });        
 };
 
 module.exports.getDetails = function(name, callback) {

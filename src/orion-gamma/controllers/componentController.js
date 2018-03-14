@@ -14,7 +14,7 @@ module.exports.partialSearch = function(req, res) {
             return res.render('result', { results: []});
         }
 
-        debug('Received %s : %o ', source, results);
+        // debug('Received %s : %o ', source, results);
         return res.render('result', { results: results
                                     });
     });
@@ -28,12 +28,12 @@ module.exports.searchPage = function(req, res) {
 
 module.exports.displayComponent = function(req, res) {
     var source=req.params.source;
-    var name=req.params.name;
+    var name=req.query.q;
 
     debug('Finding details for %s:%s', source, name);
 
     utils.getDetails(source, name, function(err, result) {
-        debug(result);        
+        // debug(result);        
         res.render('component', { error: err,
                                   componentName: result.name,
                                   data: result
