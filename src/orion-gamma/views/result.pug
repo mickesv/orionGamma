@@ -2,6 +2,7 @@ ul
   each item in results
     li
       a(href=item.url) #{item.name}
+      |  #{item.description}
   else
     li No Components or Projects were found.        
 

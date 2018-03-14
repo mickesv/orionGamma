@@ -18,8 +18,6 @@ module.exports.partialSearch = function(req, res) {
         return res.render('result', { results: results
                                     });
     });
-
-    debug('end of function');
 };
 
 module.exports.searchPage = function(req, res) {
