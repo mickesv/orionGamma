@@ -6,9 +6,9 @@ $(function(){
     
     $('#search').on('keyup', function(e) {
         if(e.keyCode === 13) {
-            hand = handlers.split(',');
+            var scrolledOnce = false;
             var params = {search: $(this).val() };
-
+            var hand = handlers.split(',');
             hand.forEach(function (h) {
                 $('#Status' + h).html('<i class="fas fa-spinner fa-spin fa-3x"></i>');
                 
@@ -19,7 +19,13 @@ $(function(){
                     $('#' + h).html(data);
                     $('#search').html('');
 
-                    console.log('Return from ' + h + ' : ' + status);                    
+                    console.log('Return from ' + h + ' : ' + status);
+
+                    if (!scrolledOnce) {
+                        scrolledOnce=true;
+                        var scrollElement = $('.SearchHandlers')[0];
+                        scrollElement.scrollIntoView(true);
+                    }
                 });
             });            
         } else {
