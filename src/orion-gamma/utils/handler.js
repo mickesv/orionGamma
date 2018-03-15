@@ -6,4 +6,7 @@ module.exports = class Handler {
     getDetails(packageName, callback) {
         callback({message:'base class, ought not to be instantiated'}, []);
     };
+
+    getRepoUrl(data) {        
+    }
 };

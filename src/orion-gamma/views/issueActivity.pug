@@ -1,0 +1,20 @@
+h3 Latest Github Issue Activity
+p Average Closing Time: #{avgClosingTime.years} years, #{avgClosingTime.months} months, and #{avgClosingTime.days} days.
+p Last #{MAXLENGTH} events:
+table
+  tr
+    th id
+    th Title
+    th State
+    th Created
+    th Updated
+    th Closed
+  each i in issueActivity
+    tr
+      td #{i.number}
+      td #{i.title}
+      td #{i.state}
+      td #{i.created_at}
+      td #{i.updated_at}
+      td #{i.closed_at}
+        

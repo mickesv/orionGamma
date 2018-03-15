@@ -48,7 +48,7 @@ module.exports = class NPMHandler extends Handler {
                 originUrl: that.npmdata.packageRoot + name
             };
             if (!data.error) {
-                var res= {
+                var res = {
                     description: data.description,
                     author: data.author.name,
                     authorContact: data.author.email,
@@ -66,6 +66,16 @@ module.exports = class NPMHandler extends Handler {
         });      
     };
 
+    getRepoUrl(data) {
+        let repoName = data.repository;
+        if (repoName.endsWith('.git')) {
+            repoName = repoName.substring(0, repoName.length -4);
+        }
+
+        return repoName;
+    }
+    
+    // --------------------
     npmSearch(packageName, callback) {
         // styled after the code in api-npm
         return https.get({

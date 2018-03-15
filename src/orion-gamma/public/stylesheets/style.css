@@ -11,6 +11,16 @@ blockquote {
     font-style: italic;
 }
 
+table {
+    border-spacing: 5px;
+    background-color: #FAFAFA;
+    border-collapse: collapse;
+}
+
+table, td {
+    border: 1px solid black;    
+}
+
 .Logo {
     height: 80px;
     position: fixed;
@@ -24,6 +34,10 @@ blockquote {
 
 .LogoSpacer {
     height: 50px;    
+}
+
+.FooterSpacer {
+    height: 100px;    
 }
 
 .Footer {

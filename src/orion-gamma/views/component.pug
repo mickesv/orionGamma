@@ -1,6 +1,12 @@
 extends layout
 
 block content
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+  script(src='/javascripts/component.js')
+  script.
+    componentName='#{componentName}';
+    repoUrl='#{repoUrl}';
+
   .ComponentHeader
     h1 Component Name: #{componentName}
   .ComponentDetails
@@ -10,9 +16,11 @@ block content
           li #{e.key}: 
             a(href='mailto:'+e.val) #{e.val}
         else
-          if e.key=='Repository' || e.key=='Homepage' || e.key=='Origin Url'
+          if e.key=='Repository' || e.key=='Homepage' || e.key=='Origin Url' || e.key=='Author Homepage'
             li #{e.key}: 
               a(href=e.val) #{e.val}
           else            
             li #{e.key}: #{e.val}        
+  .IssueActivity
+    div#IssueActivity
 
