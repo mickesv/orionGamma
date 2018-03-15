@@ -52,7 +52,7 @@ module.exports = class GithubHandler extends Handler {
                     authorHomepage: res.owner.html_url,
                     lastActivity: dateformat(res.pushed_at, 'yyyy-mm-dd'),
                     openIssuesCount: res.open_issues_count,
-                    license: res.license.name
+                    license: res.license?res.license.name:'undefined'
                 };
                 Object.assign(result,details);
             }
