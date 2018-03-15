@@ -11,7 +11,8 @@ module.exports = class NPMHandler extends Handler {
         super();
         this.npmdata = { url: 'registry.npmjs.org',
                          search: '/-/v1/search',
-                         queryRoot: '?text='
+                         queryRoot: '?text=',
+                         packageRoot: 'https://www.npmjs.org/package/'
                        };
     };
         
@@ -20,12 +21,9 @@ module.exports = class NPMHandler extends Handler {
         debug('Search for ' + name);
         return this.npmSearch(name, function(data) {
             var result=[];
-
-            debug(data);
             
             if (!data.error) {
                 data.objects.forEach(function(elem) {
-                    debug(elem.package);
                     result.push({
                         origin: 'npm',
                         name: elem.package.name,
@@ -42,11 +40,12 @@ module.exports = class NPMHandler extends Handler {
 
     getDetails(name, callback) {
         debug('Getting details for ' +name);
+        var that=this;
         return api.getdetails(name, function(data) {
             var result={
+                name: name,                
                 origin: 'npm',
-                name: name,
-                url: '/component/npm/?q=' + name
+                originUrl: that.npmdata.packageRoot + name
             };
             if (!data.error) {
                 var res= {

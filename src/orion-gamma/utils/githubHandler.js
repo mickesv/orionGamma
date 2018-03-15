@@ -1,12 +1,11 @@
-var Github = require('github-api');
 var debug = require('debug')('orion-gamma:github-api');
+var Github = require('github-api');
 var api = new Github();
 var Handler = require('./handler.js');
 
 module.exports = class GithubHandler extends Handler {
     constructor() {
         super();
-        debug('Im alive');
     }
     
     search(name, callback) {
@@ -14,7 +13,7 @@ module.exports = class GithubHandler extends Handler {
         
         api.search({q: name}).forRepositories({}, function(err, res, req) {
             var result = [];
-            debug(res[0]);        
+//            debug(res[0]);        
             if (!err) {
                 res.forEach(function (elem) {
                     result.push({
@@ -32,6 +31,14 @@ module.exports = class GithubHandler extends Handler {
     };
     
     getDetails(name, callback) {
-        debug('Getting details for ' +name);
+        var user=name.split('/')[0];
+        var repo=name.split('/')[1];
+        debug('Getting details for user %s repo %s', user, repo);
+        
+        api.getRepo(user, repo).getDetails(function (err, res, req) {
+//            debug(res);
+
+            callback(null, {});
+        });
     };
 };
