@@ -2,8 +2,11 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  # Fix for older versions of Vagrant
+  Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
   config.vm.box = "bento/ubuntu-17.10"
-  config.vm.network "forwarded_port", guest: 3000, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 3000, host: 8080
 
   config.vm.provision "install", type: "shell", inline: <<-SHELL
     # Initialise
