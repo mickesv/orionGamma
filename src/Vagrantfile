@@ -3,11 +3,24 @@
 
 Vagrant.configure("2") do |config|
   # Fix for older versions of Vagrant
-  Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+  # Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
 
-  config.vm.box = "bento/ubuntu-17.10"
-  config.vm.network "forwarded_port", guest: 3000, host: 8080
+  # Configure number of worker nodes
+  WORKERS = 1
 
+  
+  # Use the same box for all machines.
+  config.vm.box = "bento/ubuntu-17.10"  
+
+  # Manage /etc/hosts on host and VMs
+  # NOTE: Need the hostmanager plugin for this
+  # $ vagrant plugin install vagrant-hostmanager
+  config.hostmanager.enabled = false  
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true  
+  config.hostmanager.include_offline = true
+  config.hostmanager.ignore_private_ip = false  
+  
   config.vm.provision "install", type: "shell", inline: <<-SHELL
     # Initialise
     sudo apt-get -qq update
@@ -16,19 +29,55 @@ Vagrant.configure("2") do |config|
     # Install Node.js
     curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
     sudo apt-get install -y nodejs
-
-    # Install MongoDB
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-    echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
-    sudo apt -qq update && sudo apt install -y mongodb-org
   SHELL
 
-  config.vm.provision "startup", type: "shell", run: "always", inline: <<-SHELL
-    # MongoDB -- Start and verify
-    sudo service mongod start
-    sudo service mongod status   
+  workers = WORKERS.times.map { |i| "worker#{i}" }  
+  workers.each_index do |idx|
+    ip = "10.0.5.#{idx+100}"
 
+    config.vm.define workers[idx] do |c|
+      c.vm.hostname=workers[idx]
+      c.vm.network :private_network, ip: ip
+      c.vm.provision :hostmanager
+      c.vm.provision :shell, run: "always", inline: 'echo Started a Worker Node...'      
+    end
+  end  
+
+
+  config.vm.define "app" do |c|
+    c.vm.hostname="appserver"
+    c.vm.network :private_network, ip: "10.0.5.2"    
+    c.vm.network "forwarded_port", guest: 3000, host: 8088
+    c.vm.provision :hostmanager
+
+    c.vm.provision "install mongodb", type: "shell", inline: <<-SHELL
+        # Install MongoDB
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+        echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+        sudo apt -qq update && sudo apt install -y mongodb-org
+    SHELL
+    
+    c.vm.provision "install redis", type: "shell", inline: <<-SHELL
+     wget http://download.redis.io/redis-stable.tar.gz
+     tar xvzf redis-stable.tar.gz
+     cd redis-stable
+     make
+     sudo make install
+    SHELL
+
+    c.vm.provision "startup mongosb", type: "shell", run: "always", inline: <<-SHELL
+     # MongoDB -- Start and verify
+     sudo service mongod start
+     sudo service mongod status
+    SHELL
+    
+    c.vm.provision "starting redis", type: "shell", run: "always", inline: <<-SHELL
+       echo "bind 0.0.0.0" | redis-server - >>/vagrant/redis-log.txt &
+    SHELL
+
+    c.vm.provision :shell, run: "always", inline: 'echo Started AppServer... && node --version'        
     # TODO: Startup everything, including the app, here.    
     #    /vagrant/orion-gamma/start-app.sh
-  SHELL
+  end    
+  
 end

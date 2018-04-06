@@ -59,3 +59,14 @@ var dbLogstart = require('./db/logstart');
 dbLogstart.logstart();
 
 console.log('Up and running...');
+
+// Message Dispatcher
+// for sending jobs to the Worker Nodes
+// --------------------
+var disp = require('./dispatcher');
+disp.initiate()
+    .then(done => { return disp.sendTest(10);})
+    .catch(err => {
+        console.log('Dispatcher startup error: ' + err);
+        // TODO Swallow for now
+    });
