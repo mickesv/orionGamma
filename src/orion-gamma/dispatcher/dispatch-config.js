@@ -2,7 +2,9 @@ module.exports={
     dispatcherHost: 'appserver',
     queues: {
         components: 'npmComponents',
-        feedback: 'feedback',
-        test: 'test'
+        feedback: 'workerFeedback',
+        test: 'test',
+        keywords: 'keywords'
+        
     }
 };

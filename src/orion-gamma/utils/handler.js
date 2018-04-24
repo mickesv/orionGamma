@@ -9,4 +9,7 @@ module.exports = class Handler {
 
     getRepoUrl(data) {        
     }
+
+    getRawDetails(name, callback) {
+    }
 };

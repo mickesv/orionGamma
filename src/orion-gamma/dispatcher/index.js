@@ -17,6 +17,9 @@ module.exports.initiate = () => {
         Object.values(config.queues).forEach( (q) => {
             promises.push(
                 rsmq.deleteQueue({qname:q})
+                    .catch(err => {
+                        debug('Queue %s not found? %s', q, err);
+                    })
                     .then( resp => { return rsmq.createQueue({qname:q});})
                     .then( resp => {
                         debug('Created Queue: %s', q);
@@ -27,11 +30,12 @@ module.exports.initiate = () => {
             );
         });
 
-        module.exports.getWorker('feedback').on('message', feedbackMessages);
-
         Promise.all(promises)
-            .then(done => { resolve(done); })
-            .catch(err => { reject(err); });
+            .catch(err => { reject(err); })        
+            .then(done => {
+                module.exports.getWorker(config.queues.feedback).on('message', feedbackMessages);
+                resolve(done);
+            });
     });
 };
 
@@ -50,28 +54,18 @@ module.exports.sendTest = (iterations) => {
     });
 };
 
-function findQueue(qName) {
-    var q = config.queues[qName] || config.queues.feedback;
-    return q;    
-}
 
 module.exports.push=(queue, message) => {
-    let qname = findQueue(queue);
-    return rsmq.sendMessage({qname:qname, message: message});
+    return rsmq.sendMessage({qname:queue, message: message});
 };
 
 module.exports.pop=(queue) => {
-    let qname = findQueue(queue);
-    return rsmq.popMessage({qname:qname});            
+    return rsmq.popMessage({qname:queue});            
 };
 
 var RSMQWorker = require('rsmq-worker');
-var worker = null;
 
 module.exports.getWorker = (queue) => {
-    if (!worker) {
-        worker = new RSMQWorker(queue, {host:config.dispatcherHost,
-                                        autostart:true});
-    }
-    return worker;
+    return new RSMQWorker(queue, {host:config.dispatcherHost,
+                                  autostart:true});
 };

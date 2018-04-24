@@ -7,7 +7,8 @@ var NPMHandler = require('./npmHandler');
 Factory.register('npm', NPMHandler);
 
 var GithubHandler = require('./githubHandler');
-Factory.register('github', GithubHandler);
+// TODO uncomment this line to search github too
+// Factory.register('github', GithubHandler);
 // --------------------
 
 

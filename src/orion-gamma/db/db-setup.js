@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 
-var mongoDB = 'mongodb://127.0.0.1/gamma-db';
+var mongoDB = 'mongodb://appserver/gamma-db';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 

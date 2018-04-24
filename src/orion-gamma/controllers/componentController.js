@@ -4,6 +4,16 @@ var utils = require('../utils');
 
 var Github = require('../utils/githubHandler'); // Special case, since I want more info from github repo.
 
+var dispatcher = require('../dispatcher');
+function dispatchTrawlers(source, items) {
+    if ('npm' === source) {
+        items.forEach( (e) => {
+            debug('dispatching %s to %s', e.name, dispatcher.config.queues.components);
+            dispatcher.push(dispatcher.config.queues.components, JSON.stringify(e));
+        });
+    }
+};
+
 module.exports.partialSearch = function(req, res) {
     var source = req.params.source;
     var name = req.query.search;
@@ -15,6 +25,9 @@ module.exports.partialSearch = function(req, res) {
             return res.render('result', { results: []});
         }
 
+        // send the list of search results to worker nodes for trawling
+        dispatchTrawlers(source, results);
+        
         // debug('Received %s : %o ', source, results);
         return res.render('result', { results: results
                                     });

@@ -34,7 +34,16 @@ module.exports = class NPMHandler extends Handler {
                 });
             }
             
-            return callback(null, result);
+            return callback(data.error, result);
+        });
+    };
+
+    getRawDetails(name, callback) {
+        return api.getdetails(name, (data) => {
+            if (data.error) {
+                data.error += ' ' + name;
+            }
+            callback(data.error, data);
         });
     };
 
@@ -50,8 +59,8 @@ module.exports = class NPMHandler extends Handler {
             if (!data.error) {
                 var res = {
                     description: data.description,
-                    author: data.author.name,
-                    authorContact: data.author.email,
+                    author: (data.author)?data.author.name:'',
+                    authorContact: (data.author)?data.author.email:'',
                     versions: Object.keys(data.versions).length,
                     lastVersion: data['dist-tags'].latest,
                     lastVersionDate: dateFormat(data.time[data['dist-tags'].latest],'yyyy-mm-dd'),
@@ -67,7 +76,7 @@ module.exports = class NPMHandler extends Handler {
     };
 
     getRepoUrl(data) {
-        let repoName = data.repository;
+        let repoName = data.repository || '';
         if (repoName.endsWith('.git')) {
             repoName = repoName.substring(0, repoName.length -4);
         }
