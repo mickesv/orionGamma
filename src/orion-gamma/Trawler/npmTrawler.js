@@ -24,11 +24,7 @@ function dbStoreComponent(comp, trawlLevel) {
             'dist-tags': comp['dist-tags'],
             homepage: comp.homepage,
             keywords: comp.keywords,
-            // TODO
-            // repository: {
-            //     type:comp.repository.type,
-            //     url:comp.repository.url
-            // },
+            repository: comp.repository,
             versions: [],
             bugs: comp.bugs?comp.bugs.url:JSON.stringify(comp.bugs),
             license: comp.license,
