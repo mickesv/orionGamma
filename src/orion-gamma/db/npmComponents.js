@@ -17,13 +17,12 @@ var npmComponentsSchema = new Schema({
     }],
     homepage: String,
     keywords : [String],
-    repository: {
-        type: String,
-        url: String
-    },
+    repository: Schema.Types.Mixed,
     bugs: String,
     license: Schema.Types.Mixed,
-    author: Schema.Types.Mixed
+    author: Schema.Types.Mixed,
+    componentDetailsState: String,
+    componentDetails: {type: Schema.Types.ObjectId, ref: 'ComponentDetails'}
 });
 
 
