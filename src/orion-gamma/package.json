@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-      "start": "node ./bin/www",
-      "devstart": "nodemon -L ./bin/www",
-      "worker": "nodemon -L ./worker/index.js"      
+    "start": "node ./bin/www",
+    "devstart": "nodemon -L ./bin/www",
+    "trawler": "nodemon -L ./Trawler/index.js",
+    "stats": "nodemon -L ./StatsCollector/index.js"
   },
   "dependencies": {
     "api-npm": "^1.0.0",
@@ -19,6 +20,7 @@
     "https": "^1.0.0",
     "mongoose": "^5.0.9",
     "morgan": "~1.9.0",
+    "promise-loop": "^1.0.1",
     "pug": "2.0.0-beta11",
     "rsmq": "^0.8.3",
     "rsmq-promise": "^1.0.1",
