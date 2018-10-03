@@ -12,21 +12,26 @@
     "api-npm": "^1.0.0",
     "async": "^2.6.0",
     "body-parser": "~1.18.2",
+    "chart.js": "^2.7.2",
     "cookie-parser": "~1.4.3",
+    "d3": "^5.1.0",
     "dateformat": "^3.0.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "github-api": "^3.0.0",
     "https": "^1.0.0",
+    "moment": "^2.22.1",
     "mongoose": "^5.0.9",
     "morgan": "~1.9.0",
     "promise-loop": "^1.0.1",
     "pug": "2.0.0-beta11",
+    "quiche": "^0.3.0",
     "rsmq": "^0.8.3",
     "rsmq-promise": "^1.0.1",
     "rsmq-worker": "^0.5.2",
     "rubygems": "^1.0.3",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "timeseries-analysis": "^1.0.12"
   },
   "devDependencies": {
     "nodemon": "^1.17.1"

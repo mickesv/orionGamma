@@ -10,7 +10,8 @@ var timeseriesSchema = new Schema({
     type : String,
     event : String,
     time : Date,
-    data : Schema.Types.Mixed
+    data : Schema.Types.Mixed,
+    npmComponent : {type: Schema.Types.ObjectId, ref: 'npmComponents'}
 });
 
 

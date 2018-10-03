@@ -65,7 +65,7 @@ console.log('Up and running...');
 // --------------------
 var disp = require('./dispatcher');
 disp.initiate()
-    .then(done => { return disp.sendTest(10);})
+    .then(done => { return disp.sendTest(3);})
     .catch(err => {
         console.log('Dispatcher startup error: ' + err);
         // TODO Swallow for now
