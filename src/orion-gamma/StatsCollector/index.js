@@ -8,7 +8,7 @@ var dbComponentDetails = require('../db/componentDetails.js');
 
 var ghCollector = require('./githubCollector.js');
 
-var COOLOFF = 1000;
+const COOLOFF = 60000;
 // var query = {componentDetailsState:undefined};
 var query = {name: 'chai-datetime'};
 // var query = {name: 'timeago.js'};
@@ -20,6 +20,7 @@ function sleep(ms) {
 }
 
 function collectComponent() {
+    debug('Trawling a project...');
     return dbComponents.findOneAndUpdate(
         query,
         {componentDetailsState:Date.now()},
@@ -33,13 +34,15 @@ function collectComponent() {
                 return ghCollector.collect(res);
             };
         })
-        .then( async () => { await sleep(60000); }) // TODO remove this debug measure or replace it with a better cooloff
+        .then( ghCollector.cleanup )
+        .then( async () => {
+            await sleep(COOLOFF); }) // TODO remove this debug measure or replace it with a better cooloff
         .catch( (err) => { return debug(err); });
 };
 
 module.exports.startCollecting = () => {
     var myPromiseLoop = promiseLoop(collectComponent);
-    Promise.resolve().then( () => { return debug('Looking for something to do...'); })
+    Promise.resolve()
         .then(myPromiseLoop)
         .then(() => { return debug('Closing down...'); });    
 };
