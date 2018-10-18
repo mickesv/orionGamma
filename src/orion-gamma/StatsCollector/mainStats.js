@@ -118,6 +118,7 @@ function getFirstLast(retVal) {
     return retVal;
 };
 
+const LATEST = 5;
 function getAverageDuration(retVal) {
     let length = 0;
     if (retVal.durations.length) {
@@ -126,6 +127,21 @@ function getAverageDuration(retVal) {
             return acc.add(cur);
         });
         retVal.stats.averageDuration = moment.duration(sum/length).as('days');
+
+        // Re-do this for the LATEST items
+        if (retVal.durations.length > LATEST) {
+            let latest = retVal.durations.slice(retVal.durations.length - (LATEST +1 ));
+            let length = 0;
+            let sum = latest.reduce( (acc,cur) => {
+                if (0 != cur) { length++; }; // Don't count both author_at and commit_at in the average time
+                return acc.add(cur);
+            });
+            retVal.stats.averageDurationLatest = moment.duration(sum/length).as('days');
+            retVal.stats.averageDurationLatestSize = LATEST;
+        } else {
+            retVal.stats.averageDurationLatest = retVal.stats.averageDuration;
+            retVal.stats.averageDurationLatestSize = retVal.durations.length;
+        }                
     };
 
     return retVal;
@@ -273,9 +289,6 @@ const getProjectStats = (projectName) => {
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Commit') )
                   .then( getCommitStats )
-                  .then( PassThrough( (res) => {
-                      debug(res.authors);
-                  }))
                   .catch( debug ));
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Issue') )

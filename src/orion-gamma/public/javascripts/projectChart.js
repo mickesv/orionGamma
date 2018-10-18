@@ -28,9 +28,9 @@ const graphOptions= {
                 source: 'labels',
                 autoSkip: false
             },
-            // time: {
-            //     parser: 'YYYY-MM-DD'
-            // },
+            time: {
+                parser: 'YYYY-MM-DD'
+            },
             scaleLabel: {
                 display:true,
                 labelString: 'Date'
@@ -149,6 +149,7 @@ function printTags(projectName, tags) {
     data += '<li>Last Tag: ' + moment(tags.last).format('YYYY-MM-DD');
     data += '<li>Number of Tags: ' +tags.events.length;
     data += '<li>Average Time between Tags: ' + moment.duration(tags.averageDuration,'days').humanize();
+    data += '<li>Average Time between last ' + tags.averageDurationLatestSize + ' Tags: ' + moment.duration(tags.averageDurationLatest,'days').humanize();    
     data += '</ul>';
 
     $('#' + projectName + '-Tags').html(data);
@@ -159,6 +160,7 @@ function printCommits(projectName, commits) {
     data += '<li>First Commit: ' + moment(commits.first).format('YYYY-MM-DD');
     data += '<li>Last Commit: ' + moment(commits.last).format('YYYY-MM-DD');;
     data += '<li>Average Time between Commits: ' + moment.duration(commits.averageDuration,'days').humanize();
+    data += '<li>Average Time between last ' + commits.averageDurationLatestSize + ' Commits: ' + moment.duration(commits.averageDurationLatest,'days').humanize();
     data += '<li>Average Commit Size';
     data += '<ul><li>Total: ' + parseFloat(commits.averageCommitSize.total).toFixed(2);
     data += '<li>Additions: ' + parseFloat(commits.averageCommitSize.additions).toFixed(2);
@@ -178,7 +180,8 @@ function printIssues(projectName, issues) {
     let data = '<H2>Issues</H2><ul>';
     data += '<li>Currently Open Issues: ' + issues.openIssues;
     data += '<li>Closed Issues: ' + issues.closedIssues;
-    data += '<li>Average Closing Time of Issues: ' + moment.duration(issues.averageDuration,'days').humanize();    
+    data += '<li>Average Closing Time of Issues: ' + moment.duration(issues.averageDuration,'days').humanize();
+    data += '<li>Average Time between last ' + issues.averageDurationLatestSize + ' Closings: ' + moment.duration(issues.averageDurationLatest,'days').humanize();    
     data += '</ul>';
     $('#' + projectName + '-Issues').html(data);    
         

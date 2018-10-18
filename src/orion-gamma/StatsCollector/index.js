@@ -1,5 +1,5 @@
 var debug = require('debug')('orion-gamma:StatsCollector-main');
-var dateFormat = require('dateformat');
+// var dateFormat = require('dateformat');
 var promiseLoop = require('promise-loop');
 
 var db = require('../db/db-setup');
@@ -8,17 +8,14 @@ var dbComponentDetails = require('../db/componentDetails.js');
 
 var ghCollector = require('./githubCollector.js');
 
+const {sleep} = require('../utils/promiseUtils.js');
+
 const COOLOFF = 60000;
-// var query = {componentDetailsState:undefined};
-var query = {name: 'chai-datetime'};
+var query = {componentDetailsState:undefined};
+// var query = {name: 'chai-datetime'};
 // var query = {name: 'timeago.js'};
 
-function sleep(ms) {
-    return new Promise( resolve => {
-        setTimeout(resolve, ms);
-    });
-}
-
+// TODO Fix this so that I can interrupt at a nice place and exit prettily.
 function collectComponent() {
     debug('Trawling a project...');
     return dbComponents.findOneAndUpdate(
@@ -31,12 +28,17 @@ function collectComponent() {
                 await sleep(COOLOFF);
                 return null;
             } else {
-                return ghCollector.collect(res);
+                return ghCollector.collect(res)
+                    .catch( async () => {
+                        debug('Had an error. Cooling off before trying again...');
+                        await sleep(COOLOFF);
+                        return null;
+                    })
+                    .then( ghCollector.cleanup );
             };
         })
-        .then( ghCollector.cleanup )
         .then( async () => {
-            await sleep(COOLOFF); }) // TODO remove this debug measure or replace it with a better cooloff
+            await sleep(COOLOFF); })
         .catch( (err) => { return debug(err); });
 };
 

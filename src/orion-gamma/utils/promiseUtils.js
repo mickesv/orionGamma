@@ -8,8 +8,12 @@ module.exports.MaybeDo = (res, project, tactic) => {
 };
 
 module.exports.PassThrough = fn => d => {
-    fn(d);
-    return d;
+    try {
+        fn(d);
+        return d;
+    } catch (e) {
+        throw e;
+    }
 };
 
 
@@ -21,3 +25,10 @@ module.exports.ForEach = fn => d => {
 
     return Promise.all(promises);
 };
+
+
+module.exports.sleep = ms => {
+    return new Promise( resolve => {
+        setTimeout(resolve, ms);
+    });
+}

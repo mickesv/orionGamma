@@ -5,16 +5,17 @@ var handlers = require('../utils/handlers');
 var db = require('../db/db-setup');
 var dbComponentDetails = require('../db/componentDetails.js');   
 var Timeseries = require('../db/timeseries.js');
+var dbComponents = require('../db/npmComponents.js');
 
 
 var npmHandler = handlers.getHandler('npm');
 var Github = require('github-api');
-var ghApi = new Github(//);
-{
-    username: 'mickesv',
-    password: ''}); // use this when hitting rate-limits on github
 
-const {MaybeDo, PassThrough} = require('../utils/promiseUtils.js');
+const {ghCredentials} = require('../credentials.js');
+var ghApi = new Github(ghCredentials);
+
+const {sleep, MaybeDo, PassThrough} = require('../utils/promiseUtils.js');
+const COOLOFF = 10000;
 
 /**
  * Store events of a particular type to MongoDB
@@ -37,6 +38,17 @@ const store = (project, type, events) => (elements) => {
         });
     });                               
 };
+
+/** Use in catch-alls to try to print a nicer error message, and possibly rethrow the error */
+const debugError = (message, rethrow = false) => (err) => {
+    let out = String(err).substring(0,30);
+    debug('ERROR in %s: %s', message, out);
+
+    if (rethrow) {        
+        throw err;
+    };
+};
+
 
 /** Return the URL to the repo if it is available, otherwise, return null */
 function getRepoPreexist(project) {
@@ -73,17 +85,22 @@ function getRepoGithub(project) {
 /** Cleanup the URL so that it can be used by the github API */
 function cleanURL(url) {
     // TODO don't assume it is a well formed github url
-    const URLHead = '://github.com/';
+    const URLHeads = ['://github.com/', '://git@github.com/'];
     const URLTail = '.git';
 
     if (url.endsWith(URLTail)) {
         url = url.slice(0, -URLTail.length);
     }
-    
-    let pos = url.search(URLHead);    
-    if(-1 != pos) {
-        url= url.slice(pos + URLHead.length);
-    }
+
+    URLHeads.some( URLHead => {
+        let pos = url.search(URLHead);    
+        if(-1 != pos) {
+            url= url.slice(pos + URLHead.length);
+            return true;
+        } else {
+            return false;
+        };
+    });
 
     return url;
 }
@@ -101,13 +118,14 @@ function getRepoCredentials(project) {
         .then( (res) => { return MaybeDo(res, project, getRepoGithub); })
         .then( PassThrough( (res) => { project.repository = {url:res}; }))
         .then( getUserAndRepo )
-        .catch( debug );
+        .catch( debugError('getRepoCredentials', true) );
 }
 
 /** Get the github API handle for a repository */
 function getRepo(project) {
     return getRepoCredentials(project)
-        .then( (res) => { return ghApi.getRepo(res.user, res.repo); });
+        .then( (res) => { return ghApi.getRepo(res.user, res.repo); })
+        .catch( debugError('getRepo', true) );
 }
 
 /** Search github for the issues associated with a repo */
@@ -116,12 +134,14 @@ function getIssues(project) {
         .then( (res) => {
             return ghApi.getIssues(res.user, res.repo)
                 .listIssues({sort: 'updated',
-                             state: 'all'});
+                             state: 'all'})
+                .catch( debugError('getIssues:listIssues', true) );
         })
-        .then( store(project, 'Issue', ['created_at', 'updated_at', 'closed_at']) );    
+        .then( store(project, 'Issue', ['created_at', 'updated_at', 'closed_at']) )
+        .catch( debugError('getIssues', true) );
 }
 
-
+/** Get the date from the commit associated with a tag */
 const extractTagTime = (repo) => (tags) => {
     return new Promise( (resolve, reject) => {
         let promises = [];
@@ -134,7 +154,8 @@ const extractTagTime = (repo) => (tags) => {
         });
 
         Promise.all(promises)
-            .then( () => { resolve(tags); });
+            .then( () => { resolve(tags); })
+            .catch( debugError('extractTagTime', true) );
     });
 };
 
@@ -148,10 +169,16 @@ function extractCommitTime(commits) {
 }
 
 const extractCommitDetails = (repo) => (commits) => {
+    const TIMEWINDOW = 500;
     return new Promise( (resolve, reject) => {
         let promises= [];
         commits.data.forEach( (c) => {
             promises.push( Promise.resolve(repo)
+                           .then( async (repo) => {
+                               let cooloff = Math.floor(Math.random() * commits.data.length * TIMEWINDOW)+COOLOFF; // 0.5 seconds per commit, but first wait a bit.
+                               await sleep(cooloff);
+                               return repo;                                   
+                           })
                            .then( (res, reject) => {
                                if (c.sha) {
                                    return res.getSingleCommit(c.sha);
@@ -165,13 +192,31 @@ const extractCommitDetails = (repo) => (commits) => {
                                    files: res.data.files
                                };
                            })
-                           .catch( debug )
+                           .catch( err => {
+                               if ('Invalid Commit -- no sha.' == err) {
+                                   debug(err);
+                               } else {
+                                   throw err;
+                               }                                  
+                           })
+                           // .catch( debugError('extractCommitdetails::getSingleCommit', true) ) // Do not catch here, better to silentely escalate.
                          );
         });
 
-        Promise.all(promises)
-            .then( () => { resolve(commits); });
-    });
+        return Promise.resolve()
+            .then(() => {
+                let time=((commits.data.length*TIMEWINDOW)+COOLOFF)/1000;
+                debug('Extracting commit details for %d commits. This may take at least %d seconds', commits.data.length, time);
+                debug('Current Time is %s, estimated completion at %s', moment().format('HH:mm:ss'), moment().add(time, 'seconds').format('HH:mm:ss'));
+            })
+            .then( () => Promise.all(promises) )
+            .then( () => resolve(commits) )
+            .catch( err => {
+                debugError('extractCommitDetails::inner', false)(err);
+                reject(err);
+            });
+    })
+        .catch( debugError('extractCommitDetails::outer', true) );
 };
 
 
@@ -188,30 +233,48 @@ function getFirstCommitInRange(commits) {
 function getCommits(repo, options) {
     return repo.listCommits(options)
         .catch( (err) => {
-            debug('Got error back from Github %o', err);
+            let out = String(err).substring(0,30);
+            debugError('Got error back from Github %s', out);
             return { data: [] };
         });
 }
 
 function getNextCommits(repo, buildup=[], options={}) {
-    return getCommits(repo, options).then( res => {
-        if (1>=res.data.length) {
-            return buildup.concat(res.data);
-        } else {
-            let first = getFirstCommitInRange(res.data);
-            return getNextCommits(repo,
-                                  buildup.concat(res.data),
-                                  {until: first.commit.committer.date });
-        }
-    })
-        .catch(debug);
+    if (!options.since) {
+        options = {
+            since: moment('1970-01-01').toISOString(),
+            until: moment().toISOString()
+        };
+    }
+    return getCommits(repo, options)
+        .then( res => {
+            if (1 >= res.data.length) {
+                return buildup.concat(res.data);
+            } else {
+                let first = getFirstCommitInRange(res.data);
+                return Promise.resolve()
+                    .then( async () => {
+                        debug(' Cooling off before finding more commits...');
+                        await sleep(COOLOFF);
+                    })
+                    .then( () => debug(' Finding more Commits. Now up to %d, looking before %s',
+                                       buildup.length,
+                                       moment(first.commit.committer.date).format('YYYY-MM-DD')))
+                    .then( () => getNextCommits(repo,
+                                                buildup.concat(res.data),
+                                                {since: moment('1970-01-01').toISOString(),
+                                                 until: first.commit.committer.date }));
+            }
+        })
+        .catch( debugError('getNextCommits', true) );
 }
 
 const listAllCommits = (repo) => {
     return getNextCommits(repo)
         .then( res => {
             return { data: res };
-        });
+        })
+        .catch( debugError('listAllCommits', true) );
 };
 
 /**
@@ -219,44 +282,75 @@ const listAllCommits = (repo) => {
  * Currently extracts: Forks, Commits, Tags
  */
 function getEvents(project) {
-    return getRepo(project)
-        .then(PassThrough( (repo) => { return repo.listForks()
-                                      .then( store(project, 'Fork', ['pushed_at', 'created_at', 'updated_at']) ); }))
-        .then(PassThrough( (repo) => { return repo.listTags()
-                                      .then( extractTagTime(repo) )
-                                      .then( store(project, 'Tag', ['commit_at']) ); }))
-        .then(PassThrough( (repo) => { return listAllCommits(repo) // TODO: This seems to be limited to last 30, or last 2.5 years, or something like that. Fix this...
-                                      .then( extractCommitTime )
-                                      .then( extractCommitDetails(repo) )
-                                      .then( store(project, 'Commit', ['author_at', 'commit_at']) );
-                                    }))
-        .catch( debug );
+    const getRepoPromise = getRepo(project);
+    const listForksPromise = getRepoPromise
+          .then( repo => {
+              return repo.listForks()
+                  .then( store(project, 'Fork', ['pushed_at', 'created_at', 'updated_at']) )
+                  .catch( debugError('List Forks', true) );              
+          });
+    const listTagsPromise = getRepoPromise
+          .then( repo => {
+              return repo.listTags()
+                  .then( extractTagTime(repo) )
+                  .then( store(project, 'Tag', ['commit_at']) )
+                  .catch( debugError('List Tags', true) );
+          });
+    const listCommitsPromise = getRepoPromise
+          .then( repo => {
+              return listAllCommits(repo)
+                  .then( extractCommitTime )
+                  .then( extractCommitDetails(repo) )
+                  .then( store(project, 'Commit', ['author_at', 'commit_at']) )
+                  .catch( debugError('List Commits', true) );
+          });
+    
+    return Promise
+        .all([
+            listForksPromise,
+            listTagsPromise,
+            listCommitsPromise
+        ])
+        .catch( debugError('getEvents', true) );
 }
 
 /** Main function for this module -- extracts each type of interesting statistics for a project */
 module.exports.collect = (project) => {
-    return Promise.resolve(project)
-        .then( PassThrough( (p) => {
-            debug('Trawling %s', p.name);
-        }))
-        .then( PassThrough( getIssues ))
-        .then( PassThrough( getEvents ))
-        .catch(debug);
+    const resolveProjectPromise = Promise.resolve(project);
+    const printProjectPromise = resolveProjectPromise.then( p => debug('Trawling %s', p.name) );
+    const issuesPromise = resolveProjectPromise.then( getIssues );
+    const eventsPromise = resolveProjectPromise.then( getEvents );    
+          
+    return Promise
+        .all([
+            printProjectPromise,
+            issuesPromise,
+            eventsPromise
+        ])
+        .catch( (err) => {
+            resetProject(project.name);
+            debugError('Collect Issues/Events', true);            
+        });
 };
 
-module.exports.cleanup = () => {
-    let dbComponents = require('../db/npmComponents.js');
-    
+
+function resetProject(name) {
+    debug('Resetting %s', name);    
+    dbComponents.findOneAndUpdate(
+        {name:name},
+        {$unset: {componentDetailsState:''}},
+        {new: true}).exec();
+    Timeseries.remove({project:name});
+};
+
+module.exports.cleanup = () => {    
     return dbComponents.find({componentDetailsState: {$exists:true}}).exec()
         .then( (updated) => {
             updated.forEach( (e) => {
                 Timeseries.find({project:e.name}).then( (res) => {
                     if (0 == res.length) {
-                        debug('%s appears to be empty. Resetting it...', e.name);
-                        dbComponents.findOneAndUpdate(
-                            {name:e.name},
-                            {$unset: {componentDetailsState:''}},
-                            {new: true}).exec();
+                        debug('%s appears to be empty.', e.name);
+                        resetProject(e.name);
                     }
                 });
             });
