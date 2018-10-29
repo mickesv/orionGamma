@@ -201,6 +201,8 @@ function getCommitSizes(stats) {
         avgStats.additions += details.additions;
         avgStats.deletions += details.deletions;
         avgStats.count++;
+
+        e.totalCommitSize = details.total;
     });
 
     avgStats.total /= avgStats.count;
@@ -277,6 +279,24 @@ const getIssueStats = (events) => {
     });
 };
 
+function minimizeData(response) {
+    debug('Raw response is %d bytes. Mimnimizing...',
+          JSON.stringify(response).length);
+    
+    response.map(events => {
+        if(events.events) {
+            events.events.map(e => {
+                e.event.data=null;
+            });
+        };
+    });
+
+    debug('Minified response is %d bytes',
+          JSON.stringify(response).length);
+
+    return response;
+}
+
 const getProjectStats = (projectName) => {
     let promises = [];
     promises.push(Promise.resolve().then( () => {
@@ -295,17 +315,18 @@ const getProjectStats = (projectName) => {
                   .then( getIssueStats )
                   .catch( debug ));
     
-    return Promise.all(promises);
+    return Promise.all(promises)
+        .then( minimizeData );
 };
 
 module.exports.getProjectStats = getProjectStats;
 
 module.exports.getAll = () => {
-    return Promise.resolve()
     // TODO: Cache results once done so I don't have to dance on every query.
+    return Promise.resolve()
         .then( findDistinctProjects )
         .then( PassThrough( (res) => { debug('Distinct Projects: %o', res); }))
         .then( ForEach( getProjectStats ))
-        .then( PassThrough( debug ) )
+        //.then( PassThrough( debug ) )
         .catch( debug );
 };

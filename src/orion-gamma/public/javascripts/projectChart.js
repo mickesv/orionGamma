@@ -87,7 +87,7 @@ function drawChart(projectName, tags, commits, issues) {
         if (e.time) {
             e.t=e.time;        
             if (e.event && 'Commit' == e.event.type) {
-                e.y=e.event.data.details.stats.total;
+                e.y=e.totalCommitSize;
                 commitData.push(e);
             } else if (e.event && 'Tag' == e.event.type) {
                 e.y=tagPosition;
