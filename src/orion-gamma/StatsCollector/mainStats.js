@@ -314,10 +314,17 @@ const getProjectStats = (projectName) => {
                   .then( getEvents('Issue') )
                   .then( getIssueStats )
                   .catch( debug ));
+    promises.push(Promise.resolve(projectName)
+                  .then( getEvents('Fork', {event:'created_at'}) )
+                  .then( getBaseStats('Fork') )
+                  .then( PassThrough( debug ))
+                  .catch( debug ));
     
     return Promise.all(promises)
         .then( minimizeData );
 };
+
+// TODO: I can probably do something with forks as I do with issues, to get the "liveliness" of a fork. At least, I can correlate created_at and updated_at... Not sure what updated_at means, though. Is it a 'pull', or is it a 'commit' on that fork?
 
 module.exports.getProjectStats = getProjectStats;
 

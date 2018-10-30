@@ -67,10 +67,11 @@ const graphOptions= {
 const barColours={
     tag: window.chartColors.orange,
     commit: window.chartColors.blue,
-    issue: window.chartColors.red
+    issue: window.chartColors.red,
+    fork: window.chartColors.purple
 };
 
-function drawChart(projectName, tags, commits, issues) {
+function drawChart(projectName, tags, commits, issues, forks) {
     // TODO: Push lots of this to server-side, so all I have to do is throw in a "data" object into the chart
     // TODO: refactor into at least two methods
     
@@ -78,11 +79,16 @@ function drawChart(projectName, tags, commits, issues) {
 
     let allEvents=tags.events.concat(commits.events);
     allEvents = allEvents.concat(issues.events);
+    allEvents = allEvents.concat(forks.events);
     let commitData = [];
     let tagData = [];
     let issueData = [];
+    let forkData = [];
     let openCount = 0;
+
     const tagPosition = commits.averageCommitSize.total;
+    const forkPosition = 2*commits.averageCommitSize.total;
+
     allEvents.forEach( e => {
         if (e.time) {
             e.t=e.time;        
@@ -100,6 +106,9 @@ function drawChart(projectName, tags, commits, issues) {
                 }
                 e.y=openCount;
                 issueData.push(e);
+            } else if (e.event && 'Fork' == e.event.type) {
+                e.y = forkPosition;
+                forkData.push(e);
             }
         }
         // console.log(e.t + ' : ' + e.y);
@@ -121,6 +130,16 @@ function drawChart(projectName, tags, commits, issues) {
                     yAxisID: 'commit',                    
                     data:tagData
                 },
+                {
+                    label: 'Forks',
+                    showLine: false,
+                    pointRadius: 10,
+                    type: 'line',
+                    backgroundColor: color(barColours.fork).alpha(0.5).rgbString(),
+					          borderColor: barColours.fork,
+                    yAxisID: 'commit',                                        
+                    data:forkData                    
+                },                
                 {
                     label: 'Commit Size',
                     type: 'bar',
@@ -154,6 +173,19 @@ function printTags(projectName, tags) {
 
     $('#' + projectName + '-Tags').html(data);
 }
+
+function printForks(projectName, forks) {
+    let data = '<H2>Forks</H2><ul>';
+    data += '<li>First Fork: ' + moment(forks.first).format('YYYY-MM-DD');
+    data += '<li>Last Fork: ' + moment(forks.last).format('YYYY-MM-DD');
+    data += '<li>Number of Forks: ' +forks.events.length;
+    data += '<li>Average Time between Forks ' + moment.duration(forks.averageDuration,'days').humanize();
+    data += '<li>Average Time between last ' + forks.averageDurationLatestSize + ' Forks: ' + moment.duration(forks.averageDurationLatest,'days').humanize();    
+    data += '</ul>';
+
+    $('#' + projectName + '-Forks').html(data);
+}
+
 
 function printCommits(projectName, commits) {
     let data = '<H2>Commits</h2><ul>';
@@ -206,11 +238,13 @@ $(function(){
         let commits = findData('Commit', project);
         let tags = findData('Tag', project);
         let issues = findData('Issue', project);
+        let forks = findData('Fork', project);
 
         printTags(projectName, tags);
+        printForks(projectName, forks);
         printCommits(projectName, commits);
         printIssues(projectName, issues);
 
-        drawChart(projectName, tags, commits, issues);
+        drawChart(projectName, tags, commits, issues, forks);
     });
 });

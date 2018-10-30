@@ -282,35 +282,31 @@ const listAllCommits = (repo) => {
  * Currently extracts: Forks, Commits, Tags
  */
 function getEvents(project) {
+    let promises = [];
     const getRepoPromise = getRepo(project);
-    const listForksPromise = getRepoPromise
-          .then( repo => {
-              return repo.listForks()
-                  .then( store(project, 'Fork', ['pushed_at', 'created_at', 'updated_at']) )
-                  .catch( debugError('List Forks', true) );              
-          });
-    const listTagsPromise = getRepoPromise
-          .then( repo => {
-              return repo.listTags()
-                  .then( extractTagTime(repo) )
-                  .then( store(project, 'Tag', ['commit_at']) )
-                  .catch( debugError('List Tags', true) );
-          });
-    const listCommitsPromise = getRepoPromise
-          .then( repo => {
-              return listAllCommits(repo)
-                  .then( extractCommitTime )
-                  .then( extractCommitDetails(repo) )
-                  .then( store(project, 'Commit', ['author_at', 'commit_at']) )
-                  .catch( debugError('List Commits', true) );
-          });
+    promises.push( getRepoPromise
+                   .then( repo => {
+                       return repo.listForks()
+                           .then( store(project, 'Fork', ['pushed_at', 'created_at', 'updated_at']) )
+                           .catch( debugError('List Forks', true) );              
+                   }));
+    promises.push( getRepoPromise
+                   .then( repo => {
+                       return repo.listTags()
+                           .then( extractTagTime(repo) )
+                           .then( store(project, 'Tag', ['commit_at']) )
+                           .catch( debugError('List Tags', true) );
+                   }));
+    promises.push( getRepoPromise
+                   .then( repo => {
+                       return listAllCommits(repo)
+                           .then( extractCommitTime )
+                           .then( extractCommitDetails(repo) )
+                           .then( store(project, 'Commit', ['author_at', 'commit_at']) )
+                           .catch( debugError('List Commits', true) );
+                   }));
     
-    return Promise
-        .all([
-            listForksPromise,
-            listTagsPromise,
-            listCommitsPromise
-        ])
+    return Promise.all(promises)
         .catch( debugError('getEvents', true) );
 }
 
