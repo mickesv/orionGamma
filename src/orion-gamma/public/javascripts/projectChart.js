@@ -71,11 +71,12 @@ const barColours={
     fork: window.chartColors.purple
 };
 
-function drawChart(projectName, tags, commits, issues, forks) {
+
+function drawChart(safeName, projectName, tags, commits, issues, forks) {
     // TODO: Push lots of this to server-side, so all I have to do is throw in a "data" object into the chart
     // TODO: refactor into at least two methods
     
-    let context=document.getElementById(projectName+'-Graph').getContext('2d');
+    let context=document.getElementById(safeName+'-Graph').getContext('2d');
 
     let allEvents=tags.events.concat(commits.events);
     allEvents = allEvents.concat(issues.events);
@@ -163,9 +164,9 @@ function drawChart(projectName, tags, commits, issues, forks) {
     });    
 };
 
-function printDetails(projectName, details) {
+function printDetails(safeName, projectName, details) {
     if (!details.full_name) {
-        $('#' + projectName + '-Details').html('<p>--No Details Collected--</p>');            
+        $('#' + safeName + '-Details').html('<p>--No Details Collected--</p>');            
         return;
     }
     
@@ -182,10 +183,10 @@ function printDetails(projectName, details) {
     data += '<li>Subscribers: ' + details.subscribers;
     data += '</ul>';
 
-    $('#' + projectName + '-Details').html(data);    
+    $('#' + safeName + '-Details').html(data);    
 }
 
-function printTags(projectName, tags) {
+function printTags(safeName, projectName, tags) {
     let data = '<H2>Tags</H2><ul>';
     data += '<li>First Tag: ' + moment(tags.first).format('YYYY-MM-DD');
     data += '<li>Last Tag: ' + moment(tags.last).format('YYYY-MM-DD');
@@ -194,10 +195,10 @@ function printTags(projectName, tags) {
     data += '<li>Average Time between last ' + tags.averageDurationLatestSize + ' Tags: ' + moment.duration(tags.averageDurationLatest,'days').humanize();    
     data += '</ul>';
 
-    $('#' + projectName + '-Tags').html(data);
+    $('#' + safeName + '-Tags').html(data);
 }
 
-function printForks(projectName, forks) {
+function printForks(safeName, projectName, forks) {
     let data = '<H2>Forks</H2><ul>';
     data += '<li>First Fork: ' + moment(forks.first).format('YYYY-MM-DD');
     data += '<li>Last Fork: ' + moment(forks.last).format('YYYY-MM-DD');
@@ -206,11 +207,11 @@ function printForks(projectName, forks) {
     data += '<li>Average Time between last ' + forks.averageDurationLatestSize + ' Forks: ' + moment.duration(forks.averageDurationLatest,'days').humanize();    
     data += '</ul>';
 
-    $('#' + projectName + '-Forks').html(data);
+    $('#' + safeName + '-Forks').html(data);
 }
 
 
-function printCommits(projectName, commits) {
+function printCommits(safeName, projectName, commits) {
     let data = '<H2>Commits</h2><ul>';
     data += '<li>First Commit: ' + moment(commits.first).format('YYYY-MM-DD');
     data += '<li>Last Commit: ' + moment(commits.last).format('YYYY-MM-DD');;
@@ -228,17 +229,17 @@ function printCommits(projectName, commits) {
     data += '</ul>';
     data += '</ul>';
 
-    $('#' + projectName + '-Commits').html(data);    
+    $('#' + safeName + '-Commits').html(data);    
 }
 
-function printIssues(projectName, issues) {
+function printIssues(safeName, projectName, issues) {
     let data = '<H2>Issues</H2><ul>';
     data += '<li>Currently Open Issues: ' + issues.openIssues;
     data += '<li>Closed Issues: ' + issues.closedIssues;
     data += '<li>Average Closing Time of Issues: ' + moment.duration(issues.averageDuration,'days').humanize();
     data += '<li>Average Time between last ' + issues.averageDurationLatestSize + ' Closings: ' + moment.duration(issues.averageDurationLatest,'days').humanize();    
     data += '</ul>';
-    $('#' + projectName + '-Issues').html(data);    
+    $('#' + safeName + '-Issues').html(data);    
         
 }
 
@@ -247,6 +248,12 @@ function getProjectName(project) {
         return 'projectName'==e.eventType;
     }).ProjectName;
 };
+
+function getSafeName(project) {
+    return project.find( e => {
+        return 'projectName'==e.eventType;
+    }).SafeName;    
+}
 
 function findData(type, project) {
     return project.find( e => {
@@ -258,18 +265,19 @@ function findData(type, project) {
 $(function(){
     AllProjects.forEach( project => {
         let projectName=getProjectName(project);
+        let safeName = getSafeName(project);
         let details = findData('projectName', project);
         let commits = findData('Commit', project);
         let tags = findData('Tag', project);
         let issues = findData('Issue', project);
         let forks = findData('Fork', project);
 
-        printDetails(projectName, details);
-        printTags(projectName, tags);
-        printForks(projectName, forks);
-        printCommits(projectName, commits);
-        printIssues(projectName, issues);
+        printDetails(safeName, projectName, details);
+        printTags(safeName, projectName, tags);
+        printForks(safeName, projectName, forks);
+        printCommits(safeName, projectName, commits);
+        printIssues(safeName, projectName, issues);
 
-        drawChart(projectName, tags, commits, issues, forks);
+        drawChart(safeName, projectName, tags, commits, issues, forks);
     });
 });

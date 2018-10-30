@@ -283,7 +283,10 @@ const getIssueStats = (events) => {
 function getComponentDetails(projectName) {
     let details = {
         eventType: 'projectName',
-        ProjectName:projectName };
+        ProjectName:projectName,
+        SafeName: projectName.replace(/\./g, '-')
+    };
+    
 
     dbComponents.findOne({name:projectName}).exec()
         .then( res => {

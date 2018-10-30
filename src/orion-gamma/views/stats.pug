@@ -12,8 +12,8 @@ block content
     - var projectName='No defined name'
     each item in project
       if (item.eventType == 'projectName') 
-        - projectName=item.ProjectName
-        h1= 'Project: ' + projectName
+        - projectName=item.SafeName
+        h1= 'Project: ' + item.ProjectName
         div(id=projectName+'-Details')
         div(id=projectName+'-Tags')
         div(id=projectName+'-Forks')
