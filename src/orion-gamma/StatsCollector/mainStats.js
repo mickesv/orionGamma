@@ -9,8 +9,8 @@ var dateFormat = require('dateformat');
 var moment = require('moment');
 
 var db = require('../db/db-setup');
-var dbComponentDetails = require('../db/componentDetails.js');   
 var TSeries = require('../db/timeseries.js');
+var dbComponents = require('../db/npmComponents.js');
 
 const {MaybeDo, PassThrough, ForEach} = require('../utils/promiseUtils.js');
 
@@ -167,13 +167,14 @@ const getBaseStats = (eventType) => (events) => {
 };
 
 function getAuthorList(stats) {
+    // TODO: Github API has a method getContributors that does the same. Maybe I should use this instead, but that would cost me another API call.
     let authors=[];
     stats.events.forEach( c => {
         let author = undefined;
         if (c.event.data.committer) {
             author = c.event.data.committer.login;
         } else {
-            debug('null committer: %o', c);
+            debug('null committer. Skipping...');
         }
         if (authors[author]) {
             authors[author]++;
@@ -279,6 +280,26 @@ const getIssueStats = (events) => {
     });
 };
 
+function getComponentDetails(projectName) {
+    let details = {
+        eventType: 'projectName',
+        ProjectName:projectName };
+
+    dbComponents.findOne({name:projectName}).exec()
+        .then( res => {
+            if (res.componentDetails) {
+                details = Object.assign(details, res.componentDetails);
+                debug('Found Component Details for %s', projectName);
+                
+            } else {
+                debug('No Component Details for %s', projectName);
+            };
+        });
+    
+    return details;
+};
+
+
 function minimizeData(response) {
     debug('Raw response is %d bytes. Mimnimizing...',
           JSON.stringify(response).length);
@@ -295,33 +316,29 @@ function minimizeData(response) {
           JSON.stringify(response).length);
 
     return response;
-}
+};
+
 
 const getProjectStats = (projectName) => {
     let promises = [];
-    promises.push(Promise.resolve().then( () => {
-        return { eventType: 'projectName', ProjectName:projectName };
-    }));
+    promises.push(Promise.resolve(projectName)
+                  .then( getComponentDetails ));
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Tag') )
-                  .then( getBaseStats('Tag') )
-                  .catch( debug ));
+                  .then( getBaseStats('Tag') ));
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Commit') )
-                  .then( getCommitStats )
-                  .catch( debug ));
+                  .then( getCommitStats ));
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Issue') )
-                  .then( getIssueStats )
-                  .catch( debug ));
+                  .then( getIssueStats ));
     promises.push(Promise.resolve(projectName)
                   .then( getEvents('Fork', {event:'created_at'}) )
-                  .then( getBaseStats('Fork') )
-                  .then( PassThrough( debug ))
-                  .catch( debug ));
+                  .then( getBaseStats('Fork') ));
     
     return Promise.all(promises)
-        .then( minimizeData );
+        .then( minimizeData )
+        .catch( debug );
 };
 
 // TODO: I can probably do something with forks as I do with issues, to get the "liveliness" of a fork. At least, I can correlate created_at and updated_at... Not sure what updated_at means, though. Is it a 'pull', or is it a 'commit' on that fork?

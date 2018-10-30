@@ -3,7 +3,7 @@ var moment = require('moment');
 var handlers = require('../utils/handlers');
 
 var db = require('../db/db-setup');
-var dbComponentDetails = require('../db/componentDetails.js');   
+//var dbComponentDetails = require('../db/componentDetails.js');   
 var Timeseries = require('../db/timeseries.js');
 var dbComponents = require('../db/npmComponents.js');
 
@@ -277,6 +277,7 @@ const listAllCommits = (repo) => {
         .catch( debugError('listAllCommits', true) );
 };
 
+
 /**
  * Search github for the events associated with a project
  * Currently extracts: Forks, Commits, Tags
@@ -310,19 +311,63 @@ function getEvents(project) {
         .catch( debugError('getEvents', true) );
 }
 
+
+function getProjectDetails(project) {
+    let details={
+        full_name: "",
+        forks_count: 0,
+        stargazers_count: 0,
+        watchers_count: 0,
+        subscribers_count: 0,
+        size: 0,
+        open_issues_count: 0,
+        created_at: "",
+        updated_at: "",
+        pushed_at: "",
+        licence: undefined,
+        organization: undefined,
+        parent: undefined        
+    };
+
+    const getRepoPromise = getRepo(project);
+    return getRepoPromise
+        .then( PassThrough( () => { debug('Collecting Project Details'); }))
+        .then( repo => repo.getDetails()
+               .then( res => {
+                   Object.keys(details).map(k => {
+                       details[k] = res.data[k];
+                   });
+                   debug(details);
+                   return details;
+               })
+               .then( details => {
+                   dbComponents.findOneAndUpdate({name:project.name},
+                                                 {componentDetails:details},
+                                                 {new:true}).exec();
+                                                 
+               })
+               .catch( debugError('Get Project Details :: inner', true) )
+             )
+        .catch( debugError('Get Project Details :: outer', true) );
+}
+
+
 /** Main function for this module -- extracts each type of interesting statistics for a project */
 module.exports.collect = (project) => {
     const resolveProjectPromise = Promise.resolve(project);
     const printProjectPromise = resolveProjectPromise.then( p => debug('Trawling %s', p.name) );
     const issuesPromise = resolveProjectPromise.then( getIssues );
     const eventsPromise = resolveProjectPromise.then( getEvents );    
-          
+    const detailsPromise = resolveProjectPromise.then( getProjectDetails );
+    
     return Promise
         .all([
             printProjectPromise,
             issuesPromise,
-            eventsPromise
+            eventsPromise,
+            detailsPromise
         ])
+        .then( PassThrough( () => { debug('Done trawling project...'); }))
         .catch( (err) => {
             resetProject(project.name);
             debugError('Collect Issues/Events', true);            

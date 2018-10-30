@@ -22,7 +22,8 @@ var npmComponentsSchema = new Schema({
     license: Schema.Types.Mixed,
     author: Schema.Types.Mixed,
     componentDetailsState: String,
-    componentDetails: {type: Schema.Types.ObjectId, ref: 'ComponentDetails'}
+//    componentDetails: {type: Schema.Types.ObjectId, ref: 'ComponentDetails'}
+    componentDetails: Schema.Types.Mixed    
 });
 
 

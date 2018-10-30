@@ -113,7 +113,8 @@ function drawChart(projectName, tags, commits, issues, forks) {
         }
         // console.log(e.t + ' : ' + e.y);
     });    
-    
+
+    graphOptions.title.text='Project Pulse for ' + projectName;
 		let color = Chart.helpers.color;    
     let myChart=new Chart(context, {
         type:'line',
@@ -161,6 +162,28 @@ function drawChart(projectName, tags, commits, issues, forks) {
         options: graphOptions
     });    
 };
+
+function printDetails(projectName, details) {
+    if (!details.full_name) {
+        $('#' + projectName + '-Details').html('<p>--No Details Collected--</p>');            
+        return;
+    }
+    
+    let data = '<H2>Project Details</H2><ul>';
+    data += '<li>Full Name: ' + details.full_name;
+    data += '<li>License: ' + details.license;
+    data += '<li>Created At: ' + details.created_at;    
+    data += '<li>Updated At: ' + details.updated_at;    
+    data += '<li>Pushed At: ' + details.pushed_at;
+    data += '<li>Number of Forks: ' + details.forks_count;    
+    data += '<li>Open Issues: ' + details.open_issues_count;
+    data += '<li>Stargazers: '  + details.stargazers_count;    
+    data += '<li>Watchers: ' + details.watchers;
+    data += '<li>Subscribers: ' + details.subscribers;
+    data += '</ul>';
+
+    $('#' + projectName + '-Details').html(data);    
+}
 
 function printTags(projectName, tags) {
     let data = '<H2>Tags</H2><ul>';
@@ -235,11 +258,13 @@ function findData(type, project) {
 $(function(){
     AllProjects.forEach( project => {
         let projectName=getProjectName(project);
+        let details = findData('projectName', project);
         let commits = findData('Commit', project);
         let tags = findData('Tag', project);
         let issues = findData('Issue', project);
         let forks = findData('Fork', project);
 
+        printDetails(projectName, details);
         printTags(projectName, tags);
         printForks(projectName, forks);
         printCommits(projectName, commits);

@@ -14,6 +14,7 @@ block content
       if (item.eventType == 'projectName') 
         - projectName=item.ProjectName
         h1= 'Project: ' + projectName
+        div(id=projectName+'-Details')
         div(id=projectName+'-Tags')
         div(id=projectName+'-Forks')
         div(id=projectName+'-Commits')

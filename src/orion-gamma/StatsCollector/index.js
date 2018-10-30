@@ -4,7 +4,6 @@ var promiseLoop = require('promise-loop');
 
 var db = require('../db/db-setup');
 var dbComponents = require('../db/npmComponents.js');
-var dbComponentDetails = require('../db/componentDetails.js');   
 
 var ghCollector = require('./githubCollector.js');
 
