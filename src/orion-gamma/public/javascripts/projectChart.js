@@ -179,8 +179,8 @@ function printDetails(safeName, projectName, details) {
     data += '<li>Number of Forks: ' + details.forks_count;    
     data += '<li>Open Issues: ' + details.open_issues_count;
     data += '<li>Stargazers: '  + details.stargazers_count;    
-    data += '<li>Watchers: ' + details.watchers;
-    data += '<li>Subscribers: ' + details.subscribers;
+    data += '<li>Watchers: ' + details.watchers_count;
+    data += '<li>Subscribers: ' + details.subscribers_count;
     data += '</ul>';
 
     $('#' + safeName + '-Details').html(data);    

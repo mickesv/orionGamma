@@ -324,7 +324,7 @@ function getProjectDetails(project) {
         created_at: "",
         updated_at: "",
         pushed_at: "",
-        licence: undefined,
+        license: undefined,
         organization: undefined,
         parent: undefined        
     };
