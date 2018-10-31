@@ -168,6 +168,7 @@ function extractCommitTime(commits) {
     return commits;
 }
 
+// TODO: I am currently only using the 'stats' very shallowly. Do I need it at all?
 const extractCommitDetails = (repo) => (commits) => {
     const TIMEWINDOW = 500;
     return new Promise( (resolve, reject) => {
@@ -219,17 +220,6 @@ const extractCommitDetails = (repo) => (commits) => {
         .catch( debugError('extractCommitDetails::outer', true) );
 };
 
-
-function getFirstCommitInRange(commits) {
-    return commits.reduce( (acc, cur) => {
-        if (moment(acc.commit.committer.date).isBefore(cur.commit.committer.date)) {
-            return acc;
-        } else {
-            return cur;
-        }
-    });
-}
-
 function getCommits(repo, options) {
     return repo.listCommits(options)
         .catch( (err) => {
@@ -239,42 +229,55 @@ function getCommits(repo, options) {
         });
 }
 
-function getNextCommits(repo, buildup=[], options={}) {
-    if (!options.since) {
-        options = {
-            since: moment('1970-01-01').toISOString(),
-            until: moment().toISOString()
-        };
-    }
-    return getCommits(repo, options)
-        .then( res => {
+
+// ---------- Recursive fetchers, use where applicable to get more than PERPAGE results
+function getFirstInRange(events,filter) {
+    return events.reduce( (acc, cur) => {
+        if (moment(filter(acc)).isBefore(filter(cur))) {
+            return acc;
+        } else {
+            return cur;
+        }
+    });
+}
+
+const PERPAGE=100;
+function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPAGE}) {
+    return fn(repo, options)
+        .then( res => {            
             if (1 >= res.data.length) {
                 return buildup.concat(res.data);
             } else {
-                let first = getFirstCommitInRange(res.data);
+                let first = getFirstInRange(res.data, filter);
                 return Promise.resolve()
                     .then( async () => {
-                        debug(' Cooling off before finding more commits...');
+                        debug(' Cooling off before looking for %ss...', context);
                         await sleep(COOLOFF);
                     })
-                    .then( () => debug(' Finding more Commits. Now up to %d, looking before %s',
-                                       buildup.length,
-                                       moment(first.commit.committer.date).format('YYYY-MM-DD')))
-                    .then( () => getNextCommits(repo,
-                                                buildup.concat(res.data),
-                                                {since: moment('1970-01-01').toISOString(),
-                                                 until: first.commit.committer.date }));
+                    .then( () => debug(' Finding more %ss. Now up to %d, looking before %s',
+                                       context,
+                                       buildup.length+res.data.length,
+                                       moment(filter(first)).format('YYYY-MM-DD')))
+                    .then( () => getNext(repo,
+                                         fn,
+                                         filter,
+                                         context,
+                                         buildup.concat(res.data),
+                                         {since: moment('1970-01-01').toISOString(),
+                                          until: filter(first),
+                                          per_page: PERPAGE})
+                           .catch( debugError('getNext::inner' + context, true)));
             }
         })
-        .catch( debugError('getNextCommits', true) );
+        .catch( debugError('getNext::' + context, true) );
 }
 
-const listAllCommits = (repo) => {
-    return getNextCommits(repo)
+const listAll = (repo, fn, filter, context) => {
+    return getNext(repo, fn, filter, context)
         .then( res => {
             return { data: res };
         })
-        .catch( debugError('listAllCommits', true) );
+        .catch( debugError('listAllCommits', true) );    
 };
 
 
@@ -300,7 +303,7 @@ function getEvents(project) {
                    }));
     promises.push( getRepoPromise
                    .then( repo => {
-                       return listAllCommits(repo)
+                       return listAll(repo, getCommits, (obj) => obj.commit.committer.date, 'commit')                      
                            .then( extractCommitTime )
                            .then( extractCommitDetails(repo) )
                            .then( store(project, 'Commit', ['author_at', 'commit_at']) )
@@ -337,7 +340,6 @@ function getProjectDetails(project) {
                    Object.keys(details).map(k => {
                        details[k] = res.data[k];
                    });
-                   debug(details);
                    return details;
                })
                .then( details => {
@@ -355,18 +357,15 @@ function getProjectDetails(project) {
 /** Main function for this module -- extracts each type of interesting statistics for a project */
 module.exports.collect = (project) => {
     const resolveProjectPromise = Promise.resolve(project);
-    const printProjectPromise = resolveProjectPromise.then( p => debug('Trawling %s', p.name) );
-    const issuesPromise = resolveProjectPromise.then( getIssues );
-    const eventsPromise = resolveProjectPromise.then( getEvents );    
-    const detailsPromise = resolveProjectPromise.then( getProjectDetails );
+
+    let promises=[];
+    promises.push(resolveProjectPromise.then( p => debug('Trawling %s', p.name) ));
+    promises.push(resolveProjectPromise.then( getIssues ));
+    promises.push(resolveProjectPromise.then( getEvents ));
+    promises.push(resolveProjectPromise.then( getProjectDetails ));
     
     return Promise
-        .all([
-            printProjectPromise,
-            issuesPromise,
-            eventsPromise,
-            detailsPromise
-        ])
+        .all(promises)
         .then( PassThrough( () => { debug('Done trawling project...'); }))
         .catch( (err) => {
             resetProject(project.name);
