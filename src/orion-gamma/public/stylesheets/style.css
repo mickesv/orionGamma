@@ -63,6 +63,28 @@ table, td {
     padding: 10px
 }
 
+.MessageBox {
+    text-align: center;
+    box-sizing: content-box;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #F0FFF0;
+    margin: 50px;
+    padding: 10px;
+    line-height: 2;
+}
+
+.QuickLinksBox {
+    text-align: center;
+    box-sizing: content-box;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #F0F0FF;
+    margin: 50px;
+    padding: 10px;
+    line-height: 2;
+}
+
 .SearchBox {
     text-align: center;
     box-sizing: content-box;

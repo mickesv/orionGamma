@@ -7,7 +7,8 @@ $(function(){
     $('#search').on('keyup', function(e) {
         if(e.keyCode === 13) {
             var scrolledOnce = false;
-            var params = {search: $(this).val() };
+            var params = {search: $(this).val(),
+                          backdoor: backdoor};
             var hand = handlers.split(',');
             hand.forEach(function (h) {
                 $('#Status' + h).html('<i class="fas fa-spinner fa-spin fa-3x"></i>');
@@ -20,7 +21,7 @@ $(function(){
                     $('#search').html('');
 
                     console.log('Return from ' + h + ' : ' + status);
-
+                    
                     if (!scrolledOnce) {
                         scrolledOnce=true;
                         var scrollElement = $('.SearchHandlers')[0];

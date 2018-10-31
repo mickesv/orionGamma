@@ -1,6 +1,8 @@
 ul
   each item in results
     li
+      if backdoor
+        a(href=item.trawlURL) [QuickTrawl] 
       a(href=item.url) #{item.name}
       |  #{item.description}
   else

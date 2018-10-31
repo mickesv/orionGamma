@@ -384,6 +384,8 @@ function resetProject(name) {
     Timeseries.remove({project:name});
 };
 
+module.exports.resetProject = resetProject;
+
 module.exports.cleanup = () => {    
     return dbComponents.find({componentDetailsState: {$exists:true}}).exec()
         .then( (updated) => {

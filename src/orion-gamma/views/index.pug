@@ -3,6 +3,8 @@ extends layout
 block content
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src='/javascripts/main.js')
+  script.
+    backdoor='#{backdoor}';
 
   h1= title
   .ProjectInfo
@@ -14,6 +16,17 @@ block content
     | . This project addresses the following scientific challenge: 
     blockquote How to make decisions successfully for efficiently using software components or services from different sources to develop competitive software-intensive systems in relation to the trade-off between functionality, time to market, cost, quality, legacy and risk? 
     | The project addresses development of software intensive products and services, including new development and building on existing assets (systems, components, platforms, etc.).
+  if message
+    .MessageBox
+      p.message #{message}
+      a(href=statsURL) [View Project]
+  if backdoor
+    .QuickLinksBox
+      span.label Backdoor Quick Links
+      div
+        a(href='/') [Home] 
+        a(href='/backdoor') [Backdoor Home] 
+        a(href='/backdoor/allstats') [All Stats]
   .SearchBox
     script.
       handlers='#{handlers}';

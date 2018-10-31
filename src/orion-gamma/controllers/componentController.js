@@ -15,8 +15,9 @@ function dispatchTrawlers(source, items) {
 };
 
 module.exports.partialSearch = function(req, res) {
-    var source = req.params.source;
-    var name = req.query.search;
+    let source = req.params.source;
+    let name = req.query.search;
+    let backdoor = req.query.backdoor;
     debug('PartialSearch Source: %s Query: %o', req.params.source, req.query);
 
     utils.search(source, name, function(err, results) {
@@ -25,11 +26,19 @@ module.exports.partialSearch = function(req, res) {
             return res.render('result', { results: []});
         }
 
+        // Add QuickTrawl URLs
+        if (backdoor) {
+            results.map( e => {
+                e.trawlURL='/backdoor/quicktrawl/?q='+ e.name;
+            });
+        }
+        
         // send the list of search results to worker nodes for trawling
         dispatchTrawlers(source, results);
         
         // debug('Received %s : %o ', source, results);
-        return res.render('result', { results: results
+        return res.render('result', { results: results,
+                                      backdoor: backdoor
                                     });
     });
 };
