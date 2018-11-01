@@ -14,5 +14,5 @@ var timeseriesSchema = new Schema({
     npmComponent : {type: Schema.Types.ObjectId, ref: 'npmComponents'}
 });
 
-
+timeseriesSchema.index({project:1, time:1});
 module.exports = mongoose.model('timeseries', timeseriesSchema);
