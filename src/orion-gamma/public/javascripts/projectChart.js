@@ -173,7 +173,11 @@ function printDetails(safeName, projectName, details) {
     let data = '<H2>Project Details</H2><ul>';
     data += '<li>Full Name: ' + details.full_name;
     if (details.license) {
-        data += '<li>License: ' + details.license.name;
+        if(details.license.url) {
+            data += '<li>License: <a href='+details.license.url+'>'+details.license.name+'</a>';
+        } else {
+            data += '<li>License: '+details.license.name;
+        }
     }
     data += '<li>Created At: ' + details.created_at;    
     data += '<li>Updated At: ' + details.updated_at;    
