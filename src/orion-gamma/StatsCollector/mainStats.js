@@ -22,6 +22,7 @@ function findDistinctProjects() {
 };
 
 const getEvents = (eventType, additionalFilters={}) => (project) => {
+    debug('Getting %s events for %s', eventType, project);
     let query = {project:project};
     if (eventType) {
         query = Object.assign(query, {type:eventType});
@@ -174,7 +175,7 @@ function getAuthorList(stats) {
         if (c.event.data.committer) {
             author = c.event.data.committer.login;
         } else {
-            debug('null committer. Skipping...');
+            // debug('null committer. Skipping...'); // TODO: FInd out why there are null committers.
         }
         if (authors[author]) {
             authors[author]++;
@@ -303,8 +304,9 @@ function getComponentDetails(projectName) {
 };
 
 
-function minimizeData(response) {
-    debug('Raw response is %d bytes. Mimnimizing...',
+const minimizeData = (projectName) => (response) => {
+    debug('Raw response for %s is %d bytes. Mimnimizing...',
+          projectName,
           JSON.stringify(response).length);
     
     response.map(events => {
@@ -340,7 +342,7 @@ const getProjectStats = (projectName) => {
                   .then( getBaseStats('Fork') ));
     
     return Promise.all(promises)
-        .then( minimizeData )
+        .then( minimizeData(projectName) )
         .catch( debug );
 };
 
