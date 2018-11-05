@@ -252,6 +252,24 @@ function getFirstInRange(events,filter) {
     });
 }
 
+const CUTOFFYEARS=5;
+const CUTOFFCOMMIT=2000;    
+function checkCutoff(firstDate, amount) {
+    const CUTOFFDATE=moment().subtract(CUTOFFYEARS, 'years');
+    
+    if (CUTOFFCOMMIT <= amount) {
+        debug('Cutting short, have %d which is more than %d', amount, CUTOFFCOMMIT);
+        return true;
+    }
+
+    if (firstDate.isBefore(CUTOFFDATE)) {
+        debug('Cutting short, first date %s is earlier than %s', firstDate, CUTOFFDATE);        
+        return true;
+    }
+
+    return false;
+}
+
 const PERPAGE=100;
 function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPAGE}) {
     return fn(repo, options)
@@ -259,7 +277,11 @@ function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPA
             if (!res) {
                 throw "Recursive getNext; Did not get any results";
             }
-            if (1 >= res.data.length) {
+            
+            let first = getFirstInRange(res.data, filter);
+
+            if (1 >= res.data.length ||
+                checkCutoff(moment(filter(first)), buildup.length)) {
                 return buildup.concat(res.data);
             } else {
                 let first = getFirstInRange(res.data, filter);
