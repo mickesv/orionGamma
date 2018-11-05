@@ -48,6 +48,9 @@ const graphOptions= {
                 display: false
             },
             position: 'left',
+            ticks: {
+                suggestedMax: 25
+            },
             id: 'commit'
         },
                 {
@@ -87,14 +90,15 @@ function drawChart(safeName, projectName, tags, commits, issues, forks) {
     let forkData = [];
     let openCount = 0;
 
-    const tagPosition = commits.averageCommitSize.total;
-    const forkPosition = 2*commits.averageCommitSize.total;
+    const commitPosition = 0;
+    const tagPosition = 10; // commits.averageCommitSize.total;
+    const forkPosition = 20; // 2*commits.averageCommitSize.total;
 
     allEvents.forEach( e => {
         if (e.time) {
             e.t=e.time;        
             if (e.event && 'Commit' == e.event.type) {
-                e.y=e.totalCommitSize;
+                e.y=commitPosition; // e.totalCommitSize;
                 commitData.push(e);
             } else if (e.event && 'Tag' == e.event.type) {
                 e.y=tagPosition;
@@ -112,7 +116,6 @@ function drawChart(safeName, projectName, tags, commits, issues, forks) {
                 forkData.push(e);
             }
         }
-        // console.log(e.t + ' : ' + e.y);
     });    
 
     graphOptions.title.text='Project Pulse for ' + projectName;
@@ -143,8 +146,10 @@ function drawChart(safeName, projectName, tags, commits, issues, forks) {
                     data:forkData                    
                 },                
                 {
-                    label: 'Commit Size',
-                    type: 'bar',
+                    label: 'Commit',
+                    showLine: false,
+                    pointRadius: 10,                    
+                    type: 'line',
                     backgroundColor: color(barColours.commit).alpha(0.5).rgbString(),
 					          borderColor: barColours.commit,
                     yAxisID: 'commit',                                        
@@ -228,9 +233,10 @@ function printCommits(safeName, projectName, commits) {
     data += '<li>Additions: ' + parseFloat(commits.averageCommitSize.additions).toFixed(2);
     data += '<li>Deletions: ' + parseFloat(commits.averageCommitSize.deletions).toFixed(2);
     data += '</ul>';
-    data += '<li>Authors: <ul>';
-    commits.authorList.forEach( e => {
-        data +='<li>' + e;
+    data += '<li>Number of Committers: ' + commits.authorList.length;
+    data += '<li>Top 5 Committers: <ul>';
+    commits.authorList.slice(0,5).forEach( (e,idx) => {
+        data +='<li><span style="display:inline-block; text-align:right; width:3em;">' + commits.authorCommitCount[idx] + '</span> : ' + e;
     });
     data += '</ul>';
     data += '</ul>';
