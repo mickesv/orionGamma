@@ -142,20 +142,22 @@ function getIssues(project) {
 }
 
 /** Get the date from the commit associated with a tag */
-const extractTagTime = (repo) => (tags) => {
+const extractTagTime = (repo, commits) => (tags) => {
     return new Promise( (resolve, reject) => {
         let promises = [];
         tags.data.forEach( (t) => {
-            promises.push(Promise.resolve(repo)
-                          .then( (res) => { return res.getCommit(t.commit.sha); })
-                          .then( (res) => {
-                              t.commit_at = res.data.committer.date;
-                          }));
+            let commit = commits.data.find( e => {
+                return t.commit.sha==e.sha;
+            });
+            if (commit) {
+                t.commit_at = commit.commit_at;
+            } else {
+                debug('Could not find Commit for tag %s', t.name);
+                t.commit_at = null;
+            }
+            
         });
-
-        Promise.all(promises)
-            .then( () => { resolve(tags); })
-            .catch( debugError('extractTagTime', true) );
+        resolve(tags);
     });
 };
 
@@ -169,6 +171,7 @@ function extractCommitTime(commits) {
 }
 
 // TODO: I am currently only using the 'stats' very shallowly. Do I need it at all?
+// Not collecting them for now...
 const extractCommitDetails = (repo) => (commits) => {
     const TIMEWINDOW = 500;
     debug('Extracting commit details');
@@ -308,6 +311,14 @@ function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPA
         .catch( debugError('getNext::' + context, true) );
 }
 
+
+const getTags = (getRepoPromise) => (commits) => {
+    return getRepoPromise.then( repo => {
+        return repo.listTags()
+            .then( extractTagTime(repo, commits) );        
+    });
+};
+
 const listAll = (repo, fn, filter, context) => {
     return getNext(repo, fn, filter, context)
         .then( res => {
@@ -330,20 +341,17 @@ function getEvents(project) {
                            .then( store(project, 'Fork', ['pushed_at', 'created_at', 'updated_at']) )
                            .catch( debugError('List Forks', true) );              
                    }));
-    promises.push( getRepoPromise
-                   .then( repo => {
-                       return repo.listTags()
-                           .then( extractTagTime(repo) )
-                           .then( store(project, 'Tag', ['commit_at']) )
-                           .catch( debugError('List Tags', true) );
-                   }));
+    
     promises.push( getRepoPromise
                    .then( repo => {
                        return listAll(repo, getCommits, (obj) => obj.commit.committer.date, 'commit')                      
                            .then( extractCommitTime )
                            .then( extractCommitDetails(repo) )
-                           .then( store(project, 'Commit', ['author_at', 'commit_at']) )
-                           .catch( debugError('List Commits', true) );
+                           .then( PassThrough(store(project, 'Commit', ['author_at', 'commit_at'])) )
+                           .catch( debugError('List Commits', true) )
+                           .then( getTags(getRepoPromise) )
+                           .then( store(project, 'Tag', ['commit_at']) )
+                           .catch( debugError('List Tags', true) );
                    }));
     
     return Promise.all(promises)
