@@ -41,7 +41,7 @@ const store = (project, type, events) => (elements) => {
 
 /** Use in catch-alls to try to print a nicer error message, and possibly rethrow the error */
 const debugError = (message, rethrow = false) => (err) => {
-    let out = String(err).substring(0,30);
+    let out = String(err).substring(0,50);
     debug('ERROR in %s: %s', message, out);
 
     if (rethrow) {        
@@ -171,51 +171,62 @@ function extractCommitTime(commits) {
 // TODO: I am currently only using the 'stats' very shallowly. Do I need it at all?
 const extractCommitDetails = (repo) => (commits) => {
     const TIMEWINDOW = 500;
+    debug('Extracting commit details');
     return new Promise( (resolve, reject) => {
         let promises= [];
         commits.data.forEach( (c) => {
-            promises.push( Promise.resolve(repo)
-                           .then( async (repo) => {
-                               let cooloff = Math.floor(Math.random() * commits.data.length * TIMEWINDOW)+COOLOFF; // 0.5 seconds per commit, but first wait a bit.
-                               await sleep(cooloff);
-                               return repo;                                   
-                           })
-                           .then( (res, reject) => {
-                               if (c.sha) {
-                                   return res.getSingleCommit(c.sha);
-                               } else {
-                                   throw 'Invalid Commit -- no sha.';
-                               };
-                           })
-                           .then( (res) => {
-                               c.details = {
-                                   stats: res.data.stats,
-                                   files: res.data.files
-                               };
-                           })
-                           .catch( err => {
-                               if ('Invalid Commit -- no sha.' == err) {
-                                   debug(err);
-                               } else {
-                                   throw err;
-                               }                                  
-                           })
-                           // .catch( debugError('extractCommitdetails::getSingleCommit', true) ) // Do not catch here, better to silentely escalate.
-                         );
+            c.details= {
+                stats: {
+                    total: null,
+                    additions: null,
+                    deletions: null
+                },
+                files: []
+            };                       
+            // promises.push( Promise.resolve(repo)
+            //                .then( async (repo) => {
+            //                    let cooloff = Math.floor(Math.random() * commits.data.length * TIMEWINDOW)+COOLOFF; // 0.5 seconds per commit, but first wait a bit.
+            //                    await sleep(cooloff);
+            //                    return repo;                                   
+            //                })
+            //                .then( (res, reject) => {
+            //                    if (c.sha) {
+            //                        return res.getSingleCommit(c.sha);
+            //                    } else {
+            //                        throw 'Invalid Commit -- no sha.';
+            //                    };
+            //                })
+            //                .then( (res) => {
+            //                    c.details = {
+            //                        stats: res.data.stats,
+            //                        files: res.data.files
+            //                    };
+            //                })
+            //                .catch( err => {
+            //                    if ('Invalid Commit -- no sha.' == err) {
+            //                        debug(err);
+            //                    } else {
+            //                        throw err;
+            //                    }                                  
+            //                })
+            //                // .catch( debugError('extractCommitdetails::getSingleCommit', true) ) // Do not catch here, better to silentely escalate.
+            //              );
         });
 
-        return Promise.resolve()
-            .then(() => {
-                let time=((commits.data.length*TIMEWINDOW)+COOLOFF)/1000;
-                debug('Extracting commit details for %d commits. This may take at least %d seconds', commits.data.length, time);
-                debug('Current Time is %s, estimated completion at %s', moment().format('HH:mm:ss'), moment().add(time, 'seconds').format('HH:mm:ss'));
-            })
-            .then( () => Promise.all(promises) )
-            .then( () => resolve(commits) )
-            .catch( err => {
-                debugError('extractCommitDetails::inner', false)(err);
-                reject(err);
-            });
+        return resolve(commits);
+
+        // return Promise.resolve()
+        //     .then(() => {
+        //         let time=((commits.data.length*TIMEWINDOW)+COOLOFF)/1000;
+        //         debug('Extracting commit details for %d commits. This may take at least %d seconds', commits.data.length, time);
+        //         debug('Current Time is %s, estimated completion at %s', moment().format('HH:mm:ss'), moment().add(time, 'seconds').format('HH:mm:ss'));
+        //     })
+        //     .then( () => Promise.all(promises) )
+        //     .then( () => resolve(commits) )
+        //     .catch( err => {
+        //         debugError('extractCommitDetails::inner', false)(err);
+        //         reject(err);
+        //     });
     })
         .catch( debugError('extractCommitDetails::outer', true) );
 };
@@ -244,7 +255,10 @@ function getFirstInRange(events,filter) {
 const PERPAGE=100;
 function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPAGE}) {
     return fn(repo, options)
-        .then( res => {            
+        .then( res => {
+            if (!res) {
+                throw "Recursive getNext; Did not get any results";
+            }
             if (1 >= res.data.length) {
                 return buildup.concat(res.data);
             } else {
@@ -263,10 +277,10 @@ function getNext(repo, fn, filter, context, buildup=[], options={per_page: PERPA
                                          filter,
                                          context,
                                          buildup.concat(res.data),
-                                         {since: moment('1970-01-01').toISOString(),
-                                          until: filter(first),
+                                         {until: filter(first),
                                           per_page: PERPAGE})
-                           .catch( debugError('getNext::inner' + context, true)));
+                           .catch( debugError('getNext::inner(return from recurse)' + context, true)))
+                    .catch( debugError('getNext::inner' + context, true));
             }
         })
         .catch( debugError('getNext::' + context, true) );
@@ -277,7 +291,7 @@ const listAll = (repo, fn, filter, context) => {
         .then( res => {
             return { data: res };
         })
-        .catch( debugError('listAllCommits', true) );    
+        .catch( debugError('listAll ' + context, true) );    
 };
 
 
