@@ -309,10 +309,11 @@ const minimizeData = (projectName) => (response) => {
           projectName,
           JSON.stringify(response).length);
     
-    response.map(events => {
-        if(events.events) {
-            events.events.map(e => {
-                e.event.data=null;
+    response.map(itemType => {
+        if(itemType.events) {
+            itemType.events.map(e => {
+                if (e.data) { e.data=null; };
+                if (e.event.data) { e.event.data=null; };
             });
         };
     });
