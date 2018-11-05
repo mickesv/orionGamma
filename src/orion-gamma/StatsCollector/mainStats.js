@@ -285,7 +285,7 @@ function getComponentDetails(projectName) {
     let details = {
         eventType: 'projectName',
         ProjectName:projectName,
-        SafeName: projectName.replace(/\./g, '-')
+        SafeName: projectName.replace(/[\.\@\/]/g, '-')
     };
     
 
