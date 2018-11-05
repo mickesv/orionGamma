@@ -382,8 +382,15 @@ module.exports.collect = (project) => {
         .all(promises)
         .then( PassThrough( () => { debug('Done trawling project...'); }))
         .catch( (err) => {
-            resetProject(project.name);
-            debugError('Collect Issues/Events', true);            
+            resetProject(project.name);            
+            if (err.toString().includes('Error: 404 error making request'))
+            {
+                let errStr = 'Error 404, bad Github URL';
+                flagProject(project.name, errStr);
+                debugError('Collect Issues/Events', false)(errStr + '(Ignoring)');
+            } else {                
+                debugError('Collect Issues/Events', true)(err);
+            }
         });
 };
 
@@ -396,6 +403,15 @@ function resetProject(name) {
         {new: true}).exec();
     Timeseries.remove({project:name});
 };
+
+function flagProject(name, flag) {
+    debug('Flagging %s', name);    
+    dbComponents.findOneAndUpdate(
+        {name:name},
+        {componentDetailsState:flag},
+        {new: true}).exec();
+};
+
 
 module.exports.resetProject = resetProject;
 
