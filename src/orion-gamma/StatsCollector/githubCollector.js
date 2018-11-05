@@ -422,7 +422,8 @@ module.exports.cleanup = () => {
                 Timeseries.find({project:e.name}).then( (res) => {
                     if (0 == res.length) {
                         debug('%s appears to be empty.', e.name);
-                        resetProject(e.name);
+                        // resetProject(e.name);
+                        // flagProject(e.name, 'Empty');
                     }
                 });
             });
