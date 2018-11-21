@@ -102,6 +102,35 @@ table, td {
     padding: 10px
 }               
 
+.resultItem {
+    padding: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.resultItem:nth-child(even) {
+    background: #F8F8FF;
+}
+
+.resultItem .sidebar {
+    float: left;
+    width: 3em;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.resultItem .contents {
+    width: 90%
+    display: inline-block;    
+}
+
+.quickLookData.Trawled {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 #search {
     text-align: center;
     width: 80%;

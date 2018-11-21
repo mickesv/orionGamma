@@ -32,13 +32,15 @@ $(function(){
         } else {
             // This is apparently a new search
             // Empty all result fields
-            hand = handlers.split(',');
-            hand.forEach(function(h) {
-                $('#Status' + h).html('');
-                $('#Results').html('');
-                $('#ResultsSection' + h).html('');                    
-                $('#' + h).html('');
-            });
+
+            // hand = handlers.split(',');
+            // hand.forEach(function(h) {
+            //     $('#Status' + h).html('');
+            //     $('#Results').html('');
+            //     $('#ResultsSection' + h).html('');                    
+            //     $('#' + h).html('');
+            // });
         }
     });
+
 });

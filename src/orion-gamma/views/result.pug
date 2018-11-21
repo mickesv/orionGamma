@@ -1,12 +1,23 @@
-ul
-  each item in results
-    li
+script(src='/javascripts/results.js')
+
+each item in results
+  .resultItem
+    div(id='inputData', data-json=item)
+    .sidebar
+      span(id='spinner')
+        a(href='#' class='quickLook-search')
+          i.fas.fa-search.fa-2x(style='vertical-align: text-top;')
+    .contents
       if backdoor
-        a(href=item.trawlURL) [QuickTrawl] 
-      a(href=item.url) #{item.name}
+        a(href=item.trawlURL) [Deep Trawl] 
+        | &nbsp;
+      a(href='#' class='quickLook-search') #{item.name}
+      | &nbsp;
       |  #{item.description}
-  else
-    li No Components or Projects were found.        
+      div(id=safeName, class='quickLookData notTrawled')
+else
+  .MessageBox
+    p.message No Components or Projects were found.        
 
         
         

@@ -1,14 +1,8 @@
-extends layout
-
 block content
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src='/javascripts/component.js')
   script.
     componentName='#{componentName}';
     repoUrl='#{repoUrl}';
-
-  .ComponentHeader
-    h1 Component Name: #{componentName}
   .ComponentDetails
     ul
       each e in data
@@ -21,6 +15,4 @@ block content
               a(href=e.val) #{e.val}
           else            
             li #{e.key}: #{e.val}        
-  .IssueActivity
-    div#IssueActivity
 
