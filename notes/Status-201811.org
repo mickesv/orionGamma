@@ -1,0 +1,141 @@
+#+Title: Usefulness Determinants of Open Source Projects
+#+Author: Mikael Svahnberg
+#+Email: Mikael.Svahnberg@bth.se
+#+Date: 2018-11-07
+#+EPRESENT_FRAME_LEVEL: 1
+#+OPTIONS: email:t <:t todo:t f:t ':t H:2
+#+STARTUP: beamer
+
+#+LATEX_CLASS_OPTIONS: [10pt,t,a4paper]
+#+BEAMER_THEME: BTH_msv
+
+
+* Background
+** Project Orion
+[[file:./images/orion-logo.png]]
+
+http://orion-research.se/
+
+#+BEGIN_QUOTE
+ORION addresses the following scientific grand challenge:
+
+How to make decisions successfully for efficiently using software
+components or services from different sources to develop competitive
+software-intensive systems in relation to the trade-off between
+functionality, time to market, cost, quality, legacy and risk?
+
+The project addresses development of software intensive products and
+services, including new development and building on existing assets
+(systems, components, platforms, etc.).
+#+END_QUOTE
+
+** Orion Gamma
+ - So far, focus has been on /Decision Process/
+ - I wanted to introduce a /von unten/ perspective:
+
+#+BEGIN_QUOTE
+Background: Deciding between different components consist, among other
+factors, of an assessment of each of the component candidates based on
+a number of different properties. These properties include aspects
+such as functional compliance, frequency of updates to the component,
+"liveliness" of the development community surrounding the component,
+but may also include aspects such as performance, reliability, and
+cost of the component.
+
+Objective: The objective of this study is to enable a quick and easy
+assessment of components based on an initial (and extensible) set of
+properties, and to evaluate whether such a component property
+repository provides meaningful input for decision makers when deciding
+which components to include into their products.
+#+END_QUOTE
+
+[[file:./images/orion-gamma.png]]
+
+* Current State
+** Web App
+#+ATTR_ORG: :width 500
+  [[file:./images/Website.png]]
+
+  - Search for Components in ~NPM~ and ~Github~
+  - Enqueue (three levels down) for further information gathering
+  - Scrape Github for more information
+    - License
+    - Stargazers
+    - Forks
+    - Tags
+    - Issues
+    - Commits
+** Project Pulse
+#+ATTR_ORG: :width 500
+[[file:./images/Project-0.png]]
+** TODO Condense Metrics
+  - Scraping takes time and costs too much (Limit of 5000 API-calls per hour)
+  - Manually analyse a collection of projects, look for patterns
+  - Define /cheap/ Metrics to indicate current state of a project    
+* Goal
+  [[file:./images/SearchResults.png]]
+
+#+ATTR_ORG: :width 300
+[[file:./images/Polar-Chart.png]]
+* Future Steps
+** TODO Pilot Static Validation
+** TODO Industry Static Validation
+** TODO Industry Validation
+* Usefulness Measures
+  - Licence
+  - Responsiveness
+  - Popularity
+  - Liveliness
+  - Stability - Functions/features added/removed/changed over time
+  - Functionality - Functional value over time
+  - Supportability - Response by development team to user needs
+  - Longevity - Expected usability over time
+  - General quality - What the metric says
+  - Predictability - Ability to determine the functionality and quality in the future.
+* Example Projects
+#+BEGIN_SRC emacs-lisp :results output raw
+(dotimes (num 19)
+ (princ (concat "#+ATTR_ORG: :width 600\n"
+               (format "[[file:./images/Project-%d.png]]\n" num))) )
+#+END_SRC
+
+#+RESULTS:
+#+ATTR_ORG: :width 600
+[[file:./images/Project-0.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-1.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-2.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-3.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-4.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-5.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-6.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-7.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-8.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-9.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-10.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-11.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-12.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-13.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-14.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-15.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-16.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-17.png]]
+#+ATTR_ORG: :width 600
+[[file:./images/Project-18.png]]
+
