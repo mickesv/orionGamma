@@ -131,6 +131,62 @@ table, td {
     margin-bottom: 10px;
 }
 
+.badge {
+    padding: 0px;
+    margin-right: 5px;
+    font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+    border: 1px solid grey;
+    border-radius: 3px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.badgeTag {
+    padding-left: 2px;
+    padding-right: 2px;
+    background: #008000;
+    text-align: center;
+    color: white;    
+}
+
+.badgeValue {
+    padding-left: 2px;
+    padding-right: 2px;
+    min-width: 10em;
+    text-align: center;    
+    background: #808080;
+    color: white;
+}
+
+.badge a {
+    color: white;
+    text-decoration: none;
+}
+
+.ComponentDetails .pulse {
+    float: left;
+    vertical-align: top;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
+
+
+.ComponentDetails .contents {
+    display: inline-block;
+    margin: 5px;
+    width: calc(100% - 110px);
+}
+
+.ComponentDetails .feedback {
+    float: right;
+}
+
+.ComponentDetails .moreInfo {
+    align: right;
+    float: right;
+}
+
 #search {
     text-align: center;
     width: 80%;

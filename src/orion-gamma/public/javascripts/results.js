@@ -3,8 +3,8 @@ function spin(element) {
     $(element).html('<i class="fas fa-spinner fa-spin fa-2x" style="vertical-align: text-top;"></i>');
 }
 
-function endSpin(element) {
-    $(element).html('<i class="fas fa-eye fa-2x" style="vertical-align: text-top; color: #408040;"></i>');
+function endSpin(element, icon='fa-eye') {
+    $(element).html('<i class="fas ' + icon + ' fa-2x" style="vertical-align: text-top; color: #408040;"></i>');
 }
 
 $(function() {
@@ -24,14 +24,17 @@ $(function() {
         let itemResults = $(item).data('quickLook');
         let isTrawled = $(item).data('trawled');
 
-        console.dir(item);
-        
         if ('no' == isTrawled) {
             let spinner = $(item).data('spinner');
             let inputData = JSON.parse($(item).data('inputData'));
-            console.log(itemResults);
             
             if (inputData.url) {
+                // Ensure we won't search this again.
+                $(item).data('trawled', 'yes');
+                $(itemResults).addClass('Trawled');
+                $(itemResults).removeClass('notTrawled');
+                $(itemResults).html('Please wait while collecting data from other servers...');
+                
                 // Search
                 spin(spinner);
                 console.log('searching...');
@@ -39,15 +42,18 @@ $(function() {
                     console.log('got results');
                     $(itemResults).html(data);
                     endSpin(spinner);                
+                }).fail( function(err){
+                    console.log('received error from server');
+                    $(itemResults).html('Could not find any details for this project <i class="far fa-sad-tear"></i>');
+                    endSpin(spinner, 'fa-search');
+                    
+                    $(item).data('trawled', 'no');
+                    $(itemResults).addClass('notTrawled');                    
                 });
             } else {
                 console.log('No URL found. Ignoring request');
             }
             
-            // Ensure we won't search this again.
-            $(item).data('trawled', 'yes');
-            $(itemResults).addClass('Trawled');
-            $(itemResults).removeClass('notTrawled');
         } else {
             console.log('Has already trawled this project. Ignoring.');
         }

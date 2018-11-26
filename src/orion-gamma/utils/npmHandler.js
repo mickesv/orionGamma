@@ -66,6 +66,7 @@ module.exports = class NPMHandler extends Handler {
                     lastVersionDate: dateFormat(data.time[data['dist-tags'].latest],'yyyy-mm-dd'),
                     repository: data.repository.url.split('+')[1],
                     homepage: data.homepage,
+                    keywords: data.keywords,
                     license: data.license                
                 };
 
@@ -76,7 +77,7 @@ module.exports = class NPMHandler extends Handler {
     };
 
     getRepoUrl(data) {
-        let repoName = data.repository || '';
+        let repoName = data.repository || data.homepage || '';
         if (repoName.endsWith('.git')) {
             repoName = repoName.substring(0, repoName.length -4);
         }

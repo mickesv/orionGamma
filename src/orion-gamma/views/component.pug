@@ -1,18 +1,35 @@
 block content
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js')
+  script(src='/javascripts/Chart.min.js')  
   script(src='/javascripts/component.js')
   script.
-    componentName='#{componentName}';
-    repoUrl='#{repoUrl}';
-  .ComponentDetails
-    ul
-      each e in data
-        if e.key=='Author Contact'
-          li #{e.key}: 
-            a(href='mailto:'+e.val) #{e.val}
-        else
-          if e.key=='Repository' || e.key=='Homepage' || e.key=='Origin Url' || e.key=='Author Homepage'
-            li #{e.key}: 
-              a(href=e.val) #{e.val}
-          else            
-            li #{e.key}: #{e.val}        
+    var componentName='#{componentName}';
+    var repoUrl='#{repoUrl}';
+    var projectInfo=!{JSON.stringify(data).replace(/<\//g, '<\\/')}
 
+  .ComponentDetails
+    .pulse
+      canvas(id=''+componentName+'-Graph', width=100, height=100)
+    .contents
+      .badges
+        each lb in data.linkBadges
+          span(class='badge')
+            span(class='badgeTag') 
+              a(href=lb.url) #{lb.tag}
+            span(class='badgeValue')
+              a(href=lb.url) #{lb.value}
+        each b in data.badges
+          span(class='badge')
+            span(class='badgeTag') #{b.tag}
+            span(class='badgeValue') #{b.value}
+      .details
+        p Our assessment of this project: #{data.assessmentSummary}
+      .feedback
+        p Do you agree?
+        a(href="#")
+          i.far.fa-thumbs-up.fa-2x
+        a(href="#")
+          i.far.fa-thumbs-down.fa-2x
+      .moreInfo(style='visibility: hidden;')
+        input#feedback(type='text', placeholder='Please describe your interpretation of this project')
+        input(type='submit')

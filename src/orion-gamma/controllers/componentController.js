@@ -3,6 +3,7 @@ var debug = require('debug')('orion-gamma:controller');
 var utils = require('../utils');
 
 var Github = require('../utils/githubHandler'); // Special case, since I want more info from github repo.
+var quickLook = require('../QuickLook');
 
 var dispatcher = require('../dispatcher');
 function dispatchTrawlers(source, items) {
@@ -34,7 +35,7 @@ module.exports.partialSearch = function(req, res) {
         }
         
         // send the list of search results to worker nodes for trawling
-        dispatchTrawlers(source, results);
+        // dispatchTrawlers(source, results);
         
         // debug('Received %s : %o ', source, results);
         return res.render('result', { results: results,
@@ -55,20 +56,38 @@ module.exports.displayComponent = function(req, res) {
     debug('Finding details for %s:%s', source, name);
     
     utils.getDetails(source, name, function(err, result) {
-        // debug(result);
+        //let processedResults = processDetailsResults(result);
 
-        let processedResults = processDetailsResults(result);
-        let repoUrl = utils.getRepoUrl(source, result);
-        debug(repoUrl);
-        debug(processedResults);        
-            
-        res.render('component', { error: err,
-                                  componentName: result.name,
-                                  repoUrl: repoUrl,
-                                  data: processedResults
-                                });
+        debug(result);
+        
+        if (!err) {
+            let repoUrl = utils.getRepoUrl(source, result);
+            debug('Repository URL is %s', repoUrl);
+            if (repoUrl) {
+                quickLook.getData(repoUrl)
+                    .then(projectData => {
+                        debug('Returning with:');
+                        debug(projectData);
+                        
+                        res.render('component', { error: err,
+                                                  componentName: result.name,
+                                                  repoUrl: repoUrl,
+                                                  data: projectData
+                                                });
+                    })
+                    .catch( err => {
+                        debug('Error %s', err);
+                        res.render('component', { error: err });
+                    });
+            } else {
+                debug('No URL found, returning with error');                            
+                res.status(404).send('Could not find any URL for this project');
+            }
+        } else {
+            debug('Error %s', err);            
+            res.render('component', { error: err });
+        }
     });
-
 };
 
 
