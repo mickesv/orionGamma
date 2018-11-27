@@ -66,15 +66,12 @@ function spin(element) {
     $(element).html('<i class="fas fa-spinner fa-spin fa-2x" style="vertical-align: text-top;"></i>');
 }
 
-function endSpin(element, icon='fa-hand-spock') {
-    $(element).html('<i class="fas ' + icon + ' fa-2x" style="vertical-align: text-top; color: #408040;"></i>');
-}
-
 function setIcon(element, icon='fa-hand-spock', size='') {
     $(element).html('<i class="far ' +  icon + ' ' + size + '" style="vertical-align: text-top;"></i>');    
 }
 
-function toggleClicked(element, value) { // Return values are upside-down since if it is the first run I want any conditionals based on the return value to continue.
+// Return values are upside-down since if it is the first run I want any conditionals based on the return value to continue.
+function toggleClicked(element, value) { 
     if (value) {
         $(element).data('isClicked', value);
         return true;
@@ -88,6 +85,29 @@ function toggleClicked(element, value) { // Return values are upside-down since 
     }    
 };
 
+function sendFeedbackDecision(decision, textFeedback='') {
+    let data = {
+        assessment: projectInfo.assessmentSummary,
+        feedback: decision,
+        textFeedback: textFeedback,
+        details: projectInfo.assessmentDetails
+    };
+
+    $.post('/submitFeedback', data, function(data, status) {
+        console.log('Submitted feedback. Status code: ' + status);
+    }).fail( function(err) {
+        console.log('Failed while submitting feedback');
+        console.log(err);
+    });
+}
+
+function disconnect(elementsArray) {
+    elementsArray.map(elem => {
+        $(elem).off('click');
+        $(elem).click(e => {return false;});        
+    });
+};
+
 function connectElements() {
     let tag = '#' + safeName;
     let agree = $(tag).find('#agree');
@@ -98,10 +118,12 @@ function connectElements() {
     
     $(disagree).click( function (e) {
         if(toggleClicked(disagree)) {
-            toggleClicked(agree, 'false'); // TODO: Also disable the other choice            
+            toggleClicked(agree, 'false'); // TODO: Also disable the other choice
+            sendFeedbackDecision('disagree');
             $(moreInfo).css('display', 'inline-block');
             setIcon(agree, 'fa-thumbs-up');
             setIcon(disagree, 'fa-thumbs-down', 'fa-2x');
+            disconnect([agree, disagree]);
         }
         return false;
     });
@@ -109,16 +131,21 @@ function connectElements() {
     $(agree).click( function (e) {
         if (toggleClicked(agree)) {
             toggleClicked(disagree, 'false'); // TODO: Also disable the other choice
+            sendFeedbackDecision('agree');            
             $(moreInfo).css('display', 'none');
             setIcon(agree, 'fa-thumbs-up', 'fa-2x');
             setIcon(disagree, 'fa-thumbs-down');
+            disconnect([agree, disagree]);
         }
         return false;
     });
 
     $(moreInfoSubmit).click( function (e) {
+        let text=$('textarea#feedback').val();
+        sendFeedbackDecision('', text);                    
         $(submissionStatus).html('Thank you for your feedback.');
-        $(submissionStatus).css('display', 'block');        
+        $(submissionStatus).css('display', 'block');
+        disconnect([moreInfoSubmit]);
     });
 };
 

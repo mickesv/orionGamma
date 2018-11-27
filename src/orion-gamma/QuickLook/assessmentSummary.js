@@ -12,12 +12,13 @@ function makeAssessmentSummary(project) {
         forks: project.data.Fork.AssessedActivity.verbose
     };
     project.assessmentSummary='Could not find an assessment for ' + JSON.stringify(query, null, 1);
+    project.assessmentDetails=query;
     
     return assessments.findOne(query).
         then(res => {
             debug(res);            
             if(res) {
-                project.assessmentSummary=res.assessment;
+                project.assessmentSummary=res.assessment;                
             }
             return project;                
         })

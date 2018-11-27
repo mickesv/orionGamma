@@ -56,7 +56,6 @@ module.exports.displayComponent = function(req, res) {
     debug('Finding details for %s:%s', source, name);
     
     utils.getDetails(source, name, function(err, result) {
-        //let processedResults = processDetailsResults(result);
 
         debug(result);
         
@@ -66,8 +65,8 @@ module.exports.displayComponent = function(req, res) {
             if (repoUrl) {
                 quickLook.getData(repoUrl)
                     .then(projectData => {
-                        debug('Returning with:');
-                        debug(projectData);
+                        // debug('Returning with:');
+                        // debug(projectData);
                         
                         res.render('component', { error: err,
                                                   componentName: result.name,
@@ -91,63 +90,3 @@ module.exports.displayComponent = function(req, res) {
     });
 };
 
-
-module.exports.getIssueActivity = function(req, res) {
-    var name=req.query.q;
-    var url =req.query.url;    
-    debug('Finding Issue Activity for %s, with url %s', name, url);
-
-    if (!url.search('github')) {
-        return res.render('issueActivity', {error: {message: 'not a github url'}});
-    } else {
-        var urlComponents = url.split('/');
-        var user = urlComponents[urlComponents.length-2];
-        var repo = urlComponents[urlComponents.length-1];
-        debug('User %s and repo %s', user, repo);
-        var github=new Github();  
-
-        github.getIssueActivity(user, repo, function(err, data) {
-            if (err) {
-                debug(err);
-                return res.render('issueActivity', {issueActivity: []});
-            } else {
-                return res.render('issueActivity', {
-                    avgClosingTime: data.avgClosingTime,
-                    MAXLENGTH:data.MAXLENGTH,
-                    issueActivity: data.data});
-            }
-        });                
-    }    
-};
-
-
-function processDetailsResults(data) {
-    var out=[];
-    Object.keys(data).forEach(function (key) {
-        var val = data[key];
-        var keyName = capitalise(spacify(key));
-        out.push({ key:keyName, val:val});
-    });
-
-    return out;
-};
-
-
-function spacify(input) {
-    var out = '';
-    var pos=0;
-    var str = input;
-    while ((pos != -1) &&
-           (pos <= input.length)) {
-        pos=str.substring(1).search('[A-Z]');        
-        out = out + ' ' + str.substring(0, pos+1);        
-        str = str.substring(pos+1);
-    }
-
-    out = out.substring(1) + str;    
-    return out;
-};
-
-function capitalise(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
