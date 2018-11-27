@@ -44,7 +44,8 @@ $(function() {
                     endSpin(spinner);                
                 }).fail( function(err){
                     console.log('received error from server');
-                    $(itemResults).html('Could not find any details for this project <i class="far fa-sad-tear"></i>');
+                    console.log(err);
+                    $(itemResults).html('Could not find any details for this project.');
                     endSpin(spinner, 'fa-search');
                     
                     $(item).data('trawled', 'no');

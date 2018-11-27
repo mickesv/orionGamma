@@ -11,29 +11,8 @@ const {getIssues} = require('./issues.js');
 const {getDetails} = require('./details.js');
 const {processResults} = require('./process.js');
 const {badgeify, gatherChartData} = require('./outputFormatting.js');
+const {makeAssessmentSummary} = require('./assessmentSummary.js');
 
-
-function makeAssessmentSummary(project) {
-    // TODO: Get descriptive texts from database instead
-    return Promise.resolve(project)
-        .then(project => {
-            let a=[];
-
-            a.push('Commits: ' + project.data.Commit.AssessedActivity.verbose);
-            a.push('Tags: ' + project.data.Tag.AssessedActivity.verbose);
-            a.push('Created Issues: ' + project.data.Issue.AssessedActivity.Created.verbose);
-            a.push('Closed Issues: ' + project.data.Issue.AssessedActivity.Closed.verbose);
-            a.push('Forks: ' + project.data.Fork.AssessedActivity.verbose);
-            
-            project.assessmentSummary='TODO ' + a.join(', ');
-            
-            return project;
-        })
-        .catch( (err) => {
-            debugError('Make Assessment Summary', false)(err);
-            return project;
-        });
-};
 
 // ------------------------------
 // Main function

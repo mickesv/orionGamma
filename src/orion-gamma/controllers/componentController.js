@@ -72,6 +72,7 @@ module.exports.displayComponent = function(req, res) {
                         res.render('component', { error: err,
                                                   componentName: result.name,
                                                   repoUrl: repoUrl,
+                                                  safeName: projectData.safeName,
                                                   data: projectData
                                                 });
                     })

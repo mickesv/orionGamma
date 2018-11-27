@@ -31,7 +31,15 @@ chartOptions={
     },    
     legend: {
         display: false
-    }        
+    },
+    tooltips: {
+        callbacks: {
+            label: function(tooltipItem, data) {
+                let label = data.labels[tooltipItem.index] || '';
+                return label;
+            }
+        }
+    }
 };
 
 function drawChart(componentName, chartData) {
@@ -53,7 +61,72 @@ function drawChart(componentName, chartData) {
     let myChart = new Chart(context, config);    
 };
 
+
+function spin(element) {
+    $(element).html('<i class="fas fa-spinner fa-spin fa-2x" style="vertical-align: text-top;"></i>');
+}
+
+function endSpin(element, icon='fa-hand-spock') {
+    $(element).html('<i class="fas ' + icon + ' fa-2x" style="vertical-align: text-top; color: #408040;"></i>');
+}
+
+function setIcon(element, icon='fa-hand-spock', size='') {
+    $(element).html('<i class="far ' +  icon + ' ' + size + '" style="vertical-align: text-top;"></i>');    
+}
+
+function toggleClicked(element, value) { // Return values are upside-down since if it is the first run I want any conditionals based on the return value to continue.
+    if (value) {
+        $(element).data('isClicked', value);
+        return true;
+    }
+    
+    if ('true' == $(element).data('isClicked')) {
+        return false;
+    } else {
+        $(element).data('isClicked', 'true');
+        return true;
+    }    
+};
+
+function connectElements() {
+    let tag = '#' + safeName;
+    let agree = $(tag).find('#agree');
+    let disagree = $(tag).find('#disagree');
+    let moreInfo = $(tag).find('.moreInfo');
+    let moreInfoSubmit = $(moreInfo).find('#submitReason');
+    let submissionStatus = $(tag).find('.submissionStatus');
+    
+    $(disagree).click( function (e) {
+        if(toggleClicked(disagree)) {
+            toggleClicked(agree, 'false'); // TODO: Also disable the other choice            
+            $(moreInfo).css('display', 'inline-block');
+            setIcon(agree, 'fa-thumbs-up');
+            setIcon(disagree, 'fa-thumbs-down', 'fa-2x');
+        }
+        return false;
+    });
+
+    $(agree).click( function (e) {
+        if (toggleClicked(agree)) {
+            toggleClicked(disagree, 'false'); // TODO: Also disable the other choice
+            $(moreInfo).css('display', 'none');
+            setIcon(agree, 'fa-thumbs-up', 'fa-2x');
+            setIcon(disagree, 'fa-thumbs-down');
+        }
+        return false;
+    });
+
+    $(moreInfoSubmit).click( function (e) {
+        $(submissionStatus).html('Thank you for your feedback.');
+        $(submissionStatus).css('display', 'block');        
+    });
+};
+
 $(function(){
     console.log('Loading page for ' + componentName);
-    drawChart(componentName, projectInfo.chartData);
+    console.log('Safe name is ' + safeName);
+
+    connectElements();
+    
+    drawChart(safeName, projectInfo.chartData);    
 });

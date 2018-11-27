@@ -34,6 +34,8 @@ function cleanDetailsData(d) {
     result.url = result.html_url;
     result.created_at = moment(result.created_at).format('YYYY-MM-DD');
     result.updated_at = moment(result.updated_at).format('YYYY-MM-DD');    
+
+    result.safeName = result.full_name.replace(/[\.\@\/]/g, '-');
     
     return [result]; // Returning array for consistency with the others
 };

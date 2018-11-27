@@ -5,11 +5,12 @@ block content
   script.
     var componentName='#{componentName}';
     var repoUrl='#{repoUrl}';
-    var projectInfo=!{JSON.stringify(data).replace(/<\//g, '<\\/')}
+    var projectInfo=!{JSON.stringify(data).replace(/<\//g, '<\\/')};
+    var safeName = '#{safeName}';
 
-  .ComponentDetails
+  div(class='ComponentDetails' id=safeName)
     .pulse
-      canvas(id=''+componentName+'-Graph', width=100, height=100)
+      canvas(id=''+safeName+'-Graph', width=100, height=100)
     .contents
       .badges
         each lb in data.linkBadges
@@ -26,10 +27,15 @@ block content
         p Our assessment of this project: #{data.assessmentSummary}
       .feedback
         p Do you agree?
-        a(href="#")
+        a(id='agree' href="#")
           i.far.fa-thumbs-up.fa-2x
-        a(href="#")
+        a(id='disagree' href="#")
           i.far.fa-thumbs-down.fa-2x
-      .moreInfo(style='visibility: hidden;')
-        input#feedback(type='text', placeholder='Please describe your interpretation of this project')
-        input(type='submit')
+        br
+        .moreInfo(style='display: none;')
+          br
+          textarea#feedback(placeholder='Please describe your interpretation of this project' rows=4 cols=50 name='feedback-form')
+          br
+          input(id='submitReason' type='submit')
+          .submissionStatus(style='display: none;')
+
