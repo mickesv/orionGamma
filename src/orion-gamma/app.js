@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var debug = require('debug')('orion-gamma:app');
+var moment = require('moment');
 
 // Express
 // --------------------
@@ -43,6 +44,9 @@ app.use(function(err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    
+    debug('%s Error %d, remoteAddress: %s', moment(), err.status, ip);
     //debug(err);
     
   // render the error page
