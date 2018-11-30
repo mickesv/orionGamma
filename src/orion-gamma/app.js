@@ -13,6 +13,8 @@ var index = require('./routes/index');
 
 var app = express();
 
+// app.set('trust proxy', true); // Trying to get the real IP of the client and not just the IP Vagrant gives me.
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -45,8 +47,12 @@ app.use(function(err, req, res, next) {
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    
     debug('%s Error %d, remoteAddress: %s', moment(), err.status, ip);
+    debug('If running inside Vagrant, this may give some clues to the callers identity:');
+    debug(req.ip);
+    debug(req.ips);
+    debug(req.hostname);
+    debug(req.headers);        
     //debug(err);
     
   // render the error page
