@@ -63,7 +63,7 @@ module.exports.displayComponent = function(req, res) {
             let repoUrl = utils.getRepoUrl(source, result);
             debug('Repository URL is %s', repoUrl);
             if (repoUrl) {
-                quickLook.getData(repoUrl)
+                quickLook.getData(repoUrl, name)
                     .then(projectData => {
                         // debug('Returning with:');
                         // debug(projectData);
@@ -80,7 +80,8 @@ module.exports.displayComponent = function(req, res) {
                         res.render('component', { error: err });
                     });
             } else {
-                debug('No URL found, returning with error');                            
+                debug('No URL found, returning with error');
+                // TODO Include the originURL in the response, so they at least can skip over to e.g. NPM and find more details there.
                 res.status(404).send('Could not find any URL for this project');
             }
         } else {

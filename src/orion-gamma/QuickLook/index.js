@@ -16,14 +16,15 @@ const {makeAssessmentSummary} = require('./assessmentSummary.js');
 
 // ------------------------------
 // Main function
-const getData = (url) => {
+const getData = (url, name) => {
     let promises = [];
+    name = name || url;
     
     const urlPromise = Promise.resolve(url);
     const getRepoPromise = urlPromise.then( getRepo );
     const getUserAndRepoPromise = urlPromise.then( getUserAndRepo );
     const getCommitsPromise = getRepoPromise.then( getCommits );        
-    const getDetailsPromise = getRepoPromise.then( getDetails );
+    const getDetailsPromise = getRepoPromise.then( getDetails(name) );
     
     promises.push(urlPromise.then( p => debug ('Gathering data from %s', p)));
     promises.push(getRepoPromise.then( getForks ));

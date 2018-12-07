@@ -34,16 +34,21 @@ function cleanDetailsData(d) {
     result.url = result.html_url;
     result.created_at = moment(result.created_at).format('YYYY-MM-DD');
     result.updated_at = moment(result.updated_at).format('YYYY-MM-DD');    
-
-    result.safeName = result.full_name.replace(/[\.\@\/]/g, '-');
     
     return [result]; // Returning array for consistency with the others
 };
 
-function getDetails(repo) {
+const setSafeName = (name) => (result) => {
+    result[0].safeName = name.replace(/[\.\@\/]/g, '-');
+    debug('full name: %s  safe name: %s', result[0].full_name, result[0].safeName);
+    return result;
+};
+
+const getDetails = (name) => (repo) => {
     return repo.getDetails()
         .then( res => res.data )
-        .then( cleanDetailsData )    
+        .then( cleanDetailsData )
+        .then( setSafeName(name) )    
         .catch( debugError('Get Details', true) );  
 };
 
