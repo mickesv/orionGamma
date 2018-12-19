@@ -219,13 +219,13 @@ const processResults = (getDetailsPromise) => (rawResults) => {
                     };
                     
                     if ('Issue' != type) {
-                        details.data[type].AssessedActivity = formatAssessedActivity('low', 0);
+                        details.data[type].AssessedActivity = formatAssessedActivity(ranges.defaultAssessment, 0);
                     } else {
                         debug('Special treatment for Issues');
                         details.data[type].AssessedActivity = {
-                            Created: formatAssessedActivity('low', 0),
-                            Closed:  formatAssessedActivity('low', 0),
-                            Closing:  formatAssessedActivity('low', 999)
+                            Created: formatAssessedActivity(ranges.defaultAssessment, 0),
+                            Closed:  formatAssessedActivity(ranges.defaultAssessment, 0),
+                            Closing:  formatAssessedActivity(ranges.defaultAssessment, 999)
                         };
                     }
                 }

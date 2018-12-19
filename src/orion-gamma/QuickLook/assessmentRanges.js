@@ -6,17 +6,17 @@
   - closing one issue per day
 */
 module.exports.issueRange={ 
-    low: {Amount:-1,
+    Few: {Amount:-1,
           Average:{
               Created:999,
               Closed:999,
               Closing:999}},
-    medium: {Amount:100,
+    Some: {Amount:100,
              Average: {
               Created:5,
               Closed:5,
               Closing:5}},
-    high: {Amount:300,
+    Many: {Amount:300,
            Average: {
                Created:1,
                Closed:1,
@@ -42,21 +42,24 @@ HOWEVER
  Medum project is thus 100 -- 400 commits
 */
 module.exports.commitRange={ 
-    low: {Amount:-1,
+    Few: {Amount:-1,
           Average:999},
-    medium: {Amount:100,
+    Some: {Amount:100,
              Average: 10},
-    high: {Amount:400,
+    Many: {Amount:400,
            Average: 3}
 };
 
 
 // Assumes there is a cap of 30 entries.
 module.exports.defaultRange={
-    low: {Amount:-1,
+    Few: {Amount:-1,
           Average:999},
-    medium: {Amount:10,
+    Some: {Amount:10,
              Average: 20},
-    high: {Amount:20,
+    Many: {Amount:20,
            Average: 5}
 };
+
+
+module.exports.defaultAssessment='Few';

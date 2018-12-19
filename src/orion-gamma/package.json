@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "devstart": "nodemon -L ./bin/www",
     "trawler": "nodemon -L ./Trawler/index.js",
-    "stats": "nodemon -L ./StatsCollector/index.js"
+      "stats": "nodemon -L ./StatsCollector/index.js",
+      "pspop" : "nodemon -L ./ProjectStatesPopulator/index.js"
   },
   "dependencies": {
     "api-npm": "^1.0.0",
