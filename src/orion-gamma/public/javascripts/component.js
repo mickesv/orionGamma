@@ -113,6 +113,7 @@ function connectElements() {
     let agree = $(tag).find('#agree');
     let disagree = $(tag).find('#disagree');
     let moreInfo = $(tag).find('.moreInfo');
+    let feedbackArea =$(tag).find('#feedback');
     let moreInfoSubmit = $(moreInfo).find('#submitReason');
     let submissionStatus = $(tag).find('.submissionStatus');
     
@@ -141,7 +142,7 @@ function connectElements() {
     });
 
     $(moreInfoSubmit).click( function (e) {
-        let text=$('textarea#feedback').val();
+        let text=$(feedbackArea).val();
         sendFeedbackDecision('', text);                    
         $(submissionStatus).html('Thank you for your feedback.');
         $(submissionStatus).css('display', 'block');
