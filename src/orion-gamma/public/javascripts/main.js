@@ -1,15 +1,24 @@
 
 $(function(){
+    $('.ProjectInfo').accordion({
+        collapsible:true,
+        heightStyle:'content'
+    });
+        
+    
     $('#search').on('focus', function(e) {
         $(this).val('');
     });
     
     $('#search').on('keyup', function(e) {
-        if(e.keyCode === 13) {
+        if(e.keyCode === 13) {            
             var scrolledOnce = false;
             var params = {search: $(this).val(),
                           backdoor: backdoor};
             var hand = handlers.split(',');
+
+            $('.ProjectInfo').accordion('option','active',false);
+            
             hand.forEach(function (h) {
                 $('#Status' + h).html('<i class="fas fa-spinner fa-spin fa-3x"></i>');
                 

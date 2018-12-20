@@ -9,15 +9,30 @@ block content
     backdoor='#{backdoor}';
 
   h1= title
-  .ProjectInfo
-    p Welcome to #{title}.
-    p #{title} is a OSS component searcher. It will try to find the project/component you are searching for and display stats about it. The purpose is to enable an informed decision on which components to use in a project based on relevant component characteristica.
-  .OrionInfo
-    | #{title} is produced as part of the 
-    a(href='http://orion-research.se/') Orion Research Project
-    | . This project addresses the following scientific challenge: 
-    blockquote How to make decisions successfully for efficiently using software components or services from different sources to develop competitive software-intensive systems in relation to the trade-off between functionality, time to market, cost, quality, legacy and risk? 
-    | The project addresses development of software intensive products and services, including new development and building on existing assets (systems, components, platforms, etc.).
+  .ProjectInfo#foldable
+    h3 Welcome to #{title}
+    div
+      p #{title} is a OSS component searcher. It will try to find the component you are searching for and display statistics about it. The purpose is to enable an informed decision on which components to use in a project based on relevant component characteristica.    
+      | #{title} is produced as part of the 
+      a(href='http://orion-research.se/') Orion Research Project
+      | . This project addresses the following scientific challenge: 
+      blockquote How to make decisions successfully for efficiently using software components or services from different sources to develop competitive software-intensive systems in relation to the trade-off between functionality, time to market, cost, quality, legacy and risk? 
+      | The project addresses development of software intensive products and services, including new development and building on existing assets (systems, components, platforms, etc.).
+    h3 Presented Information
+    div
+      p The information collected is primarily statistics from the past six months of the development of the component. In particular, the following metrics are collected:
+      ul
+        li Number of Commits
+        li Number of Tags
+        li Number of Created Issues
+        li Number of Closed Issues
+        li Number of Forks
+      p Together, these metrics are used to create an assessment of
+      ul
+        li How likely is it that development of the component will continue?
+        li How responsive are the developers to the users of the component?
+      p This is summarised as follows:
+      img.image(src="images/exampleProject.png" width=800)
   if message
     .MessageBox
       p.message #{message}
