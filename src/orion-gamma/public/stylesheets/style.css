@@ -219,3 +219,13 @@ table, td {
 #searchSpinner {
     font-size: 30px;
 }
+
+.whatisthis {
+    padding: 0px;
+    margin-right: 5px;
+    font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+    border-radius: 3px;
+    white-space: nowrap;
+    display: inline-block;
+    text-align: center;    
+}

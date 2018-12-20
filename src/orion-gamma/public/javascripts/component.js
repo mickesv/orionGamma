@@ -116,6 +116,20 @@ function connectElements() {
     let feedbackArea =$(tag).find('#feedback');
     let moreInfoSubmit = $(moreInfo).find('#submitReason');
     let submissionStatus = $(tag).find('.submissionStatus');
+    let pulseExplanation = '#pulseExplanation';
+    let explanationLink = $(tag).find('#whatisthis');
+
+    $(pulseExplanation).dialog({
+        autoOpen:false,
+        width:850,
+        height:450,
+        modal:true,
+        buttons: {
+            close: function() {
+                $(this).dialog('close');
+            }
+        }
+    });
     
     $(disagree).click( function (e) {
         if(toggleClicked(disagree)) {
@@ -147,6 +161,11 @@ function connectElements() {
         $(submissionStatus).html('Thank you for your feedback.');
         $(submissionStatus).css('display', 'block');
         disconnect([moreInfoSubmit]);
+    });
+
+    $(explanationLink).click( function (e) {
+        $(pulseExplanation).dialog('open');
+        return false;
     });
 };
 

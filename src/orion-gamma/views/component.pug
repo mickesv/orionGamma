@@ -11,6 +11,8 @@ block content
   div(class='ComponentDetails' id=safeName)
     .pulse
       canvas(id=''+safeName+'-Graph', width=100, height=100)
+      span(class='whatisthis')
+        a(id='whatisthis' href='#') What is this?
     .contents
       .badges
         each lb in data.linkBadges
@@ -38,4 +40,5 @@ block content
           br
           input(id='submitReason' type='submit')
           .submissionStatus(style='display: none;')
-
+  div(id='pulseExplanation' title='What is this?' hidden='hidden')
+    img.image(src="images/exampleProject.png" width=800)

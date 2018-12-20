@@ -2,6 +2,8 @@ extends layout
 
 block content
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+  script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js")
+  link(rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css")
   script(src='/javascripts/main.js')
   script.
     backdoor='#{backdoor}';
@@ -43,6 +45,4 @@ block content
     each handler in handlers
       div(id='Results' + handler)
         h3(id='ResultsSection' + handler)
-        div(id=handler)
-    
-    
+        div(id=handler)       
