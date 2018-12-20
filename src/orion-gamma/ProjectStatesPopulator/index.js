@@ -69,6 +69,7 @@ module.exports.readStatesFile = (filename) => {
     return fsp.readFile(filename, {encoding:'utf8'})
         .then( parseAsLines )
         .then( ForEach(parseAndStoreLine))
+        .then( () => process.exit(0) )
         .catch( debug );
 }
 
