@@ -1,3 +1,4 @@
 node_modules
 .vagrant
 /src/redis-log.txt
+/notes/Status-201901.tex

@@ -1,0 +1,141 @@
+#+Title: Usefulness Determinants
+#+Subtitle: …of Open Source Projects
+#+Author: Mikael Svahnberg
+#+Email: Mikael.Svahnberg@bth.se
+#+Date: 2018-11-07
+#+EPRESENT_FRAME_LEVEL: 1
+#+OPTIONS: email:t <:t todo:t f:t ':t H:2 toc:nil
+#+STARTUP: beamer
+
+#+LATEX_CLASS_OPTIONS: [10pt,t,a4paper]
+#+BEAMER_THEME: BTH_msv
+
+* Background
+** Background
+How to make decisions successfully for efficiently using software
+components or services from different sources to develop competitive
+software-intensive systems in relation to the trade-off between
+functionality, time to market, cost, quality, legacy and risk?
+
+*One year ago* the focus was on
+- the decision /process/
+- decision /attributes/
+- decision /environment/
+
+D. Badampudi, K. Wnuk, C. Wohlin, U. Franke, D. Smite, and A.
+Cicchetti, "A Decision-making Process-line for Selection of Software
+Asset Origins and Components", Journal of Systems and Software,
+Available, 135, pp. 88-104, 2018.
+* Orion \gamma
+** The Developer's Perspective
+#+ATTR_LATEX: :height 6cm
+#+ATTR_ORG: :width 800
+[[file:./images/ExtremeProgramming.jpg]]
+* Goal, Questions, Metrics
+** Goal
+
+
+Select the best open source component for use in a development project.
+** Input for Questions
+:PROPERTIES:
+:BEAMER_OPT: shrink=15
+:END:
+P. Chatzipetrou, E. Alégroth, E. Papatheocharous, M. Borg, T. Gorschek
+and K. Wnuk, "Component selection in Software Engineering - Which
+attributes are the most important in the decision process?", In Proc.
+of the 44th Euromicro Conference on Software Engineering and Advanced
+Applications, 2018. /Distinguished paper/
+
+| Priority | Attribute                            |
+|----------+--------------------------------------|
+|        1 | Cost                                 |
+|        2 | Support of the Component             |
+|        3 | Longevity Prediction                 |
+|        4 | Level of off-the-shef fit to product |
+|        5 | API adequacy                         |
+|        6 | Code Quality                         |
+|        7 | Access to Relevant Documentation     |
+|        8 | Adherence to Standards               |
+|        9 | Programming Language Performance     |
+|       10 | Complexity                           |
+|       11 | Size                                 |
+|       12 | Other                                |
+|----------+--------------------------------------|
+** Attributes / Questions
+:PROPERTIES:
+:BEAMER_OPT: shrink=15
+:END:
+
+| Attribute                             | Questions                                                                     |
+|---------------------------------------+-------------------------------------------------------------------------------|
+| Cost                                  | What is the cost of the component?                                            |
+| Support of the Component              | What support channels exist?                                                  |
+| Support of the Component              | What is the amount of support available?                                      |
+| Support of the Component              | How quickly can support be obtained?                                          |
+| Longevity Prediction                  | How long has the component existed?                                           |
+| Longevity Prediction                  | How likely is the component to continue existing?                             |
+| Longevity Prediction                  | How likely is the component to continue being developed?                      |
+| Level of off-the-shelf fit to product | How much customisation is required to use the component?                      |
+| Level of off-the-shelf fit to product | How much of the required functionality is already supported by the component? |
+| API adequacy                          | What is the maturity of the external API?                                     |
+| Code Quality                          | What is the current test status?                                              |
+| Code Quality                          | What code revew practices are the developers of the component using?          |
+| Access to relevant documentation      | What documentation is available?                                              |
+| Adherence to standards                | To what extent does the component adhere to relevant standards?               |
+| Programming Language Performance      | What programming language is the component written in?                        |
+| Complexity                            | What is the complexity of the code in the component?                          |
+| Size                                  | What is the code size of the component?                                       |
+| Size                                  | What is the memory footprint of the running component?                        |
+|---------------------------------------+-------------------------------------------------------------------------------|
+** Metrics
+:PROPERTIES:
+:BEAMER_OPT: shrink=30
+:END:
+
+| Questions                                                | Metrics                                                                     |
+|----------------------------------------------------------+-----------------------------------------------------------------------------|
+| What support channels exist?                             | Activity on Github Issue Tracker (last 6 months)                            |
+| What is the amount of support available?                 | Ratio of opened vs closed issues last 6 months                              |
+|                                                          | Amount of closed issues last 6 months                                       |
+| How quickly can support be obtained?                     | Average closing time of issues last 6 months                                |
+| How long has the component existed?                      | Project creation date                                                       |
+| How likely is the component to continue existing?        | COMPOUND: Commits && Closed issues && created issues && Forks last 6 months |
+| How likely is the component to continue being developed? | COMPOUND: commits && closed issues                                          |
+|----------------------------------------------------------+-----------------------------------------------------------------------------|
+* Project Status Archetypes
+** Two Example Projects
+#+ATTR_ORG: :width 600
+#+ATTR_LATEX: :height 3cm
+[[file:./images/Project-0.png]]
+
+#+ATTR_ORG: :width 600
+#+ATTR_LATEX: :height 3cm
+[[file:./images/Project-1.png]]
+* a Decision Support Tool
+** Search tool
+#+ATTR_ORG: :width 500
+#+ATTR_LATEX: :height 3cm
+  [[file:./images/Website.png]]
+
+#+ATTR_ORG: :width 800
+#+ATTR_LATEX: :height 3cm
+[[file:./images/exampleProject.png]]
+** Collecting Feedback
+- "Our assessment of this project" is based on classification into a project archetype.
+- We may be wrong, we collect input to refine our classification:
+#+ATTR_LATEX: :height 1cm 
+ [[file:./images/thumbs.png]]
+** Live Demo
+
+http://msv-nuc00.dap.bth.se:8088/
+
+# http://localhost:8088/
+
+* Next Steps
+** Next Steps
+- [ ] Pilot Static Validation
+- [ ] Industry Static Validation
+- [ ] Industry Validation
+- [ ] Determine frequency of different project archetypes.
+- [ ] Investigate other metrics, /easily harvested/, that can enable software developers to make more informed decisions.
+  - Wash, rinse, repeat.
