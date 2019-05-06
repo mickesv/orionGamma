@@ -2,7 +2,7 @@ var debug = require('debug')('orion-gamma:ProjectStatesPopulator');
 var db = require('../db/db-setup');
 var assessments = require('../db/assessmentSummaries.js');
 var fs = require('fs');
-const fsp = fs.promises;
+const fsp = require('fs').promises;
 const {ForEach,PassThrough} = require('../utils/promiseUtils.js');
 
 const FILEPATH='./ProjectStatesPopulator/';
