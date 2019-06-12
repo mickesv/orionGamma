@@ -1,0 +1,299 @@
+
+* Background
+** Original TAM model
+#+BEGIN_SRC dot :file tam-original.png
+digraph {
+rankdir="LR"
+size=10
+node [style="filled"]
+ev [label="External Variables"]
+
+subgraph {
+rank=same
+pu [label="Perceived Usefulness"]
+peu [label="Perceived Ease of Use"]
+peu -> pu
+}
+
+subgraph {
+rankdir="LR"
+a [label="Attitude towards Using"]
+bi [label="Behavioral Intention to Use"]
+asu [label="Actual Sysem Use"]
+a -> bi
+bi -> asu
+}
+
+ev -> pu
+ev -> peu
+peu -> a
+pu -> a
+pu -> bi
+}
+#+END_SRC
+
+#+RESULTS:
+[[file:tam-original.png]]
+
+*** TODO Citation to original TAM
+    Davis 1986
+** TAM2
+Ref: Venkatesh and Davis 2000
+
+(from Park 2009)
+#+BEGIN_QUOTE
+TAM2 extended the original model to explain perceived usefulness and usage intentions including social influence
+(subjective norm, voluntariness, and image), cognitive instrumental processes (job relevance, output quality, and
+result demonstrability) and experience. The new model was tested in both voluntary and mandatory settings. The
+results strongly supported TAM2 and explained 60 percent of user adoption using this updated version of TAM
+(Venkatesh & Davis, 2000).
+#+END_QUOTE
+
+(also Park 2009)
+#+BEGIN_QUOTE
+The questions in Part II were not only made based on Davis’s prior studies with modifications to fit the specific
+context of the e-learning but also mainly adapted from the three studies for the objectives of the study: Lee, Cheung,
+& Chen, (2005); Ndubisi (2006); and Malhotra & Galletta (1999). Part II consisted of four sub-sections, as follows:
+perceived ease of use (PE), perceived usefulness (PU), attitude (AT), and behavioral intention (BI). The questions in
+Part III were developed by the researcher to measure e-learning self-efficacy (SE).
+#+END_QUOTE
+* DONE References to check
+  CLOSED: [2019-05-22 Wed 13:33]
+- [ ] Selim 2003: Web-based learning "Course Website Acceptance Model CWAM"
+- [X] UTAUT Unified Theory of Acceptance and Use Technology (Venkatesh et al. 2003)
+- [X] Easy introduction to TAM, TAM2, maybe some references to use :: Park 2009 - TAM for e-learning courses
+- [X] Whitworth 2003 WOSP model -- Web Of System Performance, a "successor" to TAM
+  - Naive and not as useful to our purposes as TAM
+- [X] Useful questionnaire :: v.d. Heijden 2004, extended TAM to evaluate hedonic systems
+  - Questionnaire used:
+    - Perceived usefulness (seven-point Likert scale, ranging from highly disagree to highly agree; developed specifically for this research project). Alpha = 0.90
+      By using <the system>
+      - I can decide more quickly and more easily which movie I want to go see than in the past
+      - I can better decide which movie I want to go see than in the past
+      - I am better informed about new movies
+      - I can decide more quickly and more easily whether I want to go see a particular movie or not
+      - I can better decide whether I want to go see a particular movie or not
+    - Perceived ease of use (seven-point Likert scale, ranging from highly disagree to highly agree; Venkatesh and Davis 2000). Alpha = 0.87
+      - The interaction with <the system> is clear and understandable
+      - Interaction with <the system> does not require a lot of mental effort
+      - I find <the system> easy to use
+      - I find it easy to get <the system> to do what I want it to do
+    - Perceived enjoyment (seven-point semantic differentials; Cheung et al. 2000; Igbaria et al. 1995). Alpha = 0.86
+      - Enjoyable -- disgusting
+      - Exciting -- dull
+      - Pleasant -- unpleasant
+      - Interesting -- boring
+    - Behavioral intention (seven-point Likert scale, ranging from highly disagree to highly agree; Venkatesh and Davis 2000). Alpha = 0.87
+      - I intend to revisit <the system> shortly
+      - I predict that I will revisit <the system> in the short term
+- [X] Wu & Wang 2005: TAM for Mobile commerce
+  - Nothing really new
+- [X] Background/Related work :: Dwivedi 2017, Re-examining the Unified Theory of Acceptance and Use of Technology (UTAUT): Towards a Revised Theoretical Model
+  - https://link.springer.com/article/10.1007/s10796-017-9774-y
+  - decent background/related work section
+- [X] TAM3 Venkatesh & Bala 2008
+  - Many more categories to consider;
+    - Perceived usefulness
+    - Perceived ease of use
+    - Subjective norm
+    - Image
+    - Job relevance
+    - Output quality
+    - Result demonstrability
+    - Computer self-efficacy
+    - Perceptions of external control
+    - Computer anxiety
+    - Computer playfulness
+    - Perceived enjoyment
+    - Objective usability
+- [X] Venkatesh et al. 2002 User Acceptance Enablers in Individual Decision Making About Technology: Toward an Integrated Model
+  - Pre-Training. Questionnaire:
+    - Intrinsic Motivation
+      - I find the system to be enjoyable.
+      - The actual process of using the system is pleasant.
+      - I have fun using the system
+    - Perceived Ease of Use
+      - My interaction with the system is clear and understandable.
+      - Interacting with the system does not require a lot of my mental effort.
+      - I find the system to be easy to use.
+      - I find it easy to get the system to do what I want it to do.
+    - Perceived Usefulness
+      - Using the system improves my performance in my job.
+      - Using the system in my job increases my productivity.
+      - Using the system enhances my effectiveness on the job.
+      - I find the system to be useful in my job.
+    - Behavioral Intention
+      - Assuming I had access to the system, I intend to use it.
+      - Given that I had access to the system, I predict that I would use it.
+- [X] Davis 1989 -- original TAM
+  - Perceived Usefulness
+    - My job would be difficult to perform without electronic mail.
+    - Using electronic mail gives me greater control over my work.
+    - Using electronic mail improves my job performance.
+    - The electronic mail system addresses my job-related needs.
+    - Using electronic mail saves me time.
+    - Electronic mail enables me to accomplish tasks more quickly.
+    - Electronic mail supports critical aspects of my job.
+    - Using electronic mail allows me to accomplish more work than would otherwise be
+    - possible.
+    - Using electronic mail reduces the time I spend on unproductive activities.
+    - Using electronic mail enhances my effectiveness on the job.
+    - Using electronic mail improves the quality of the work I do.
+    - Using electronic mail increases my productivity.
+    - Using electronic mail makes it easier to do my job.
+    - Overall, I find the electronic mail system useful in my job.
+  - Perceived Ease of Use
+    - I often become confused when I use the electronic mail system.
+    - I make errors frequently when using electronic mail.
+    - Interacting with the electronic mail system is often frustrating.
+    - I need to consult the user manual often when using electronic mail.
+    - Interacting with the electronic mail system requires a lot of my mental effort.
+    - I find it easy to recover from errors encountered while using electronic mail.
+    - The electronic mail system is rigid and inflexible to interact with.
+    - I find it easy to get the electronic mail system to do what I want it to do.
+    - The electronic mail system often behaves in unexpected ways.
+    - I find it cumbersome,to use the electronic mail system.
+    - My interaction with the electronic mail system is easy for me to understand.
+    - It is easy for me to remember how to perform tasks using the electronic mail system.
+    - The electronic mail system provides helpful guidance in performing tasks.
+    - Overall, I find the electronic mail system easy to use.
+- [X] Venkatesh && Davis 2000 -- TAM2
+  - Intention to Use
+  - perceived usefulness
+  - perceived ease of use
+  - subjective norm
+  - voluntariness
+  - image
+  - job relevance
+  - output quality
+  - result demonstrability
+- [X] Davis 1980 -- original PhD Thesis for TAM2
+- [X] Useful Questionnaire :: Lederer et al. 2000 -- TAM for work-related taks using WWW.
+  - Ok summary of previous work
+  - May borrow some of the questions
+- [X] Yi && Hwang 2003 -- TAM for web-based systems
+  - §3.2 has the questionnaire used. Nothing new on the original TAM sections. Some new aspecs surrounding it, but nothing that we need.
+- [X] Money && Turner 2004 -- Applicability of TAM for knowledge management systems
+  - Orion \gamma is a Knowledge Management System, ergo TAM is applicable.
+--------------------
+
+* TODO How to analyse results of TAM questionnaire?
+- [ ] Cronbachs Alpha
+  - https://www.statistiskordbok.se/ord/cronbachs-alfa/
+  - https://stats.idre.ucla.edu/spss/faq/what-does-cronbachs-alpha-mean/
+* Orion TAM
+#+BEGIN_SRC dot :file tam-orion.png
+digraph {
+rankdir="LR"
+size=10
+node [style="filled"]
+
+subgraph  {
+label="External Variables"
+ind [label="Individual Factors"]
+soc [label="Social Factors"]
+org [label="Organisational Factors"]
+tech [label="Technological Factors"]
+
+{ind, soc, org, tech} -> ev
+ev [label="External Variables"]
+}
+
+subgraph {
+label="cognitive domain" 
+rankdir="LR"
+rank=same
+pu [label="Perceived Usefulness"]
+peu [label="Perceived Ease of Use"]
+peu -> pu
+}
+
+subgraph {
+rankdir="LR"
+a [label="Attitude towards Using"]
+bi [label="Behavioral Intention to Use"]
+asu [label="Actual Sysem Use"]
+a -> bi
+bi -> asu
+}
+
+ev -> pu
+ev -> peu
+peu -> a
+pu -> a
+pu -> bi
+}
+#+END_SRC
+
+#+RESULTS:
+[[file:tam-orion.png]]
+
+** DONE External Variables :PartV:
+   CLOSED: [2019-05-22 Wed 14:18]
+:NOTES:
+ask these questions after PEU and PU, since PEU and PU are the core of the study
+
+PartI would be demographics
+
+External variables are inspired from e.g. Hofmeisters software architecture method, and the factor categories there.
+- Organisational factors
+- Technological factors
+- Product factors
+:END:
+*** DONE Individual Factors :PartV:
+    CLOSED: [2019-05-22 Wed 13:57]
+I feel confident finding information about components in Orion Gamma.
+I have the necessary skills for using Orion Gamma.
+*** DONE Social Factors :PartV:
+    CLOSED: [2019-05-22 Wed 13:59]
+Developing with the help of third party components is a good idea.
+It is impossible to build larger systems today without using ready-made reusable components.
+In order to become a proficient software developer it is necessary to know how to find good components.
+I am positive to the use of open source components.
+*** DONE Organisational Factors :PartV:
+    CLOSED: [2019-05-22 Wed 14:01]
+I am allowed to use any component I wish in my development.
+I have restrictions on which component licenses I am allowed to use.
+I have restrictions on the cost of components.
+I have restrictions on using open source components.
+I have restrictions on using components from certain sources or suppliers.
+I have restrictions on using components without clear service level agreements.
+*** DONE Technical Factors :PartV:
+    CLOSED: [2019-05-22 Wed 14:03]
+I have no difficulty in accessing and using Orion Gamma.
+Orion Gamma is able to extract information about all components I search for.
+The programming language I use have good support for downloading and using third party components.
+The programming language I use have good support for finding and assessing third party components.
+There is a large selection of third party components available for the programming language I use.
+** DONE Perceived Ease of Use :PartII:
+   CLOSED: [2019-05-22 Wed 13:50]
+I find Orion Gamma easy to use.
+Learning how to use Orion Gamma was easy for me.
+It is easy to become skilful at using Orion Gamma.
+I find the data presented to me by Orion Gamma to be easy to understand.
+I find the assessment of a component presented to me by Orion Gamma to be easy to understand.
+** DONE Perceived Usefulness :PartIII:
+   CLOSED: [2019-05-22 Wed 13:51]
+Orion Gamma would improve my finding of suitable components to use.
+Orion Gamma would increase my productivity as a developer.
+Orion Gamma makes it easy to assess components.
+Orion Gamma makes it easy to compare components.
+Orion Gamma presents meaningful data for each component to me.
+Orion Gamma makes meaningful assessments of the presented data.
+Orion Gamma presents the necessary data to me in order to assess a component.
+Orion Gamma presents too much data to me in order to assess a component.
+** DONE Attitude towards Using :PartIV:
+   CLOSED: [2019-05-22 Wed 13:55]
+Using component information repositories is necessary in order to find good components.
+It is necessary to compare several components in order to select the best one.
+It is important that a component is still being actively developed or supported for me to use it.
+It is important that a component has a community of other users for me to use it.
+There is no need for a separate tool to understand whether a component is developed or supported.
+There is no need for a separate tool to understand whether a component has a community of other users.
+** DONE Behavioral Intention to Use :PartIV:
+   CLOSED: [2019-05-22 Wed 13:56]
+I already use component information repositories such as Orion Gamma or provided by the programming language I use regularly.
+I intend to use component information repositories such as Orion Gamma regularly.
+I intend to use Orion Gamma regularly in the future.
+** WAIT Actual System Use
+* TODO Merge vd. Heijdens TAM to OrionTAM (or, to be precise Venkatesh and Davis 2000)
