@@ -2,6 +2,7 @@
 $(function(){
     $('.ProjectInfo').accordion({
         collapsible:true,
+        active: 1,
         heightStyle:'content'
     });
         
