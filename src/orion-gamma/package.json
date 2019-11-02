@@ -34,7 +34,7 @@
     "github-api": "^3.0.0",
     "https": "^1.0.0",
     "moment": "^2.22.1",
-    "mongoose": "^5.0.9",
+    "mongoose": "^5.7.5",
     "morgan": "~1.9.0",
     "promise-loop": "^1.0.1",
     "pug": "2.0.0-beta11",
