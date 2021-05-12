@@ -25,7 +25,7 @@
     "api-npm": "^1.0.0",
     "async": "^2.6.0",
     "body-parser": "~1.18.2",
-    "chart.js": "^2.7.2",
+    "chart.js": "^2.9.4",
     "cookie-parser": "~1.4.3",
     "d3": "^5.1.0",
     "dateformat": "^3.0.3",
