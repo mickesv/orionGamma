@@ -1,0 +1,370 @@
+
+
+Blueprintjs/datetime:
+Tags: Indicate going from beta versions 0.1-0.9 to version 1.0 onto maintenance and release 2.0. Hence, more of a stable release cycle.
+Forks: Indicate that people see the value of the component and aim to use it in different ways, indicates stability.
+Commits: Good amount of commits throughout, indicates a well established and working community.
+Issues: The 12 hour closing time indicates that you can get quick support.
+
+Macro observations:
+	- Created 2016, first fork 2018?
+
+SUMMARY:
+Stability: 	High - Stable versions being released
+Functionality: 	High - Stable development pace, forks and subscribers
+Supportability: High - Continuous commits and short issue closing time
+Longevity:	High - Stable commit pace
+	(Compare averages of commits over time to improve?)
+Gen. Quality:	Medium - Many reported/open issues
+Predictability: High - Many developers, continuous updates and progress, predictable.
+————————————
+
+Clone-deep:
+Tags: Component is growing in terms of functionality, which could be negative since that could imply huge deltas in functionality from release to release (adds uncertainty). Especially since #issues go up after each release.
+Forks: Forks support previous statement that users are satisfied with certain functionality and don’t want the planned, added functionality.
+Commits: Slow updates indicate few developers, less support and adds uncertainty
+Issues: Few issues but they linger, which adds additional uncertainty and potential techical debt if the component is used in a project.
+
+Macro observations:
+	- One developer.
+
+SUMMARY:
+Stability:	Medium - Moderately stable versions being released (#issues)
+Functionality:	High - Many different functions
+Supportability:	Low - Long time between updates, few developers
+Longevity:	High - Stable release frequency
+Gen. Quality:	Medium - High variation in issues
+Predictability: Low - Irregularity in release and tag pattern compared to issues
+————————————
+
+Javascript-date
+Tags: N/A
+Forks: Low number indicates lack of popularity or that the function is so specific that there isn’t much more to do with it.
+Commits: Low rate, perhaps not necessary due to explicitness of function. Seems stable.
+Issues: Only one issue, fixed. Probably due to simplicity of function again.
+
+Macro observations:
+	- Assumptions about project capabilities (Size/complexity/abilities) makes
+	  quantitative data easier to reason about. Cannot be automated!
+
+SUMMARY:
+Stability:	High - simple, yet updated function
+Functionality:	Low - Very specific
+	(Size of entire component could help in evaluation)
+Supportability:	N/A - Assumed N/A but not enough data
+Longevity:	High - Stable and continuosly maintained, albeit slowly
+Gen. Quality:	High - Small, precise functionality with only one issue
+Predictability: High - Not going anywhere, will not change much
+——————————————
+
+Date-now
+Tags: Indicate a “final version” has been released and that current project has died
+Forks: Indicates that current project lives on elsewhere and that there is interest to build and improve it which speaks well for the base functionality
+Commits: Few commits with few lines of code, i.e. very specific functionality.
+Issues: Very precis functionality but still several issues and no maintenance, might require workarounds.
+
+Macro observations:
+	- Seems to have same functionality (Semantically) as jacascript-date
+	- Javascript-date seems a better choice.
+
+SUMMARY:
+Stability:	High - Small function, seems finished
+Functionality:	Low - Small, specific function
+Supportability:	Low - Dead projects
+Longevity:	Low - Not maintained
+Gen. Quality:	Medium - Special function with issues, may require workaround
+Predictability:	High - It is what it is.
+————————————
+
+Date-time
+Tags: Stable releases with updates to the functionality, which assumably is quite specific. 
+Forks: A few, indicating functionality worth building on.
+Commits: Stable but infrequent, which adds uncertainty. Especially coupled with issue closing time in graph! (OBS: Closing time 21 hours? Is that really correct?)
+Issues: No issues indicates stable functionality
+
+Macro observations:
+	- Seems to be something wrong with issues?
+
+SUMMARY:
+Stability:	High - Frequent commits and tags, stable updates
+Functionality:	Low - Specific function
+Supportability: Medium - Few issues but take a long time to get issues fixed
+Longevity:	Medium - Small function but still getting updates
+Gen. Quality:	High - Small feature, no issues and still gets updated
+Predictability: Medium - Why is a small function like this being updated???
+——————————————
+
+Date-utils
+Tags: Only one stable official release, which co-analyzed with issues indicates this could be a troublesome component that is quite immature still.
+Forks: Many forks could indicate, based on previous tag observation, that there is good functionality here but the core team can’t make it work properly so others are making their own projects.
+Commits: Indicate that work was made up until release and then some attempts at fixing the many issues with the project but then people lost interest. Size of commits had been valuable.
+Issues: Indicates low quality as they keep rising. Coupled with people forking the project indicates poor quality but interesting functionality.
+Macro observations:
+	- Many issues AND many forks = Nice functionality but low quality and no support
+	- Many issues AND many commits = Nice functionality but low quality and support
+
+SUMMARY:
+Stability:	Medium - Functionality is stable but buggy.
+Functionality:	High - Many forks, many interested parties branching off
+Supportability:	Low - Long issue closing time and commits have died off
+Longevity:	Low - Many forks indicate project is going elsewhere
+Gen. Quality:	Low - Steadily increasing number of issues but no commits
+Predictability:	Medium - Quality/functionality is what it is because it’s not maintained
+—————————————
+
+Dayjs
+Tags: Seems like a project building up from version 0.1 to 0.9 to stable verion 1.0 and then releasing versions 1.1 and 1.2 and 1.2.1 over time. Indicating that the functionality was built up to a specific goal and then this functionality is maintained primarily to remove issues rather than new functionality.
+Forks: The forks at the end of the project support the Tag conclusion that work here is on the direction of improving quality and not functionality but that others seek to improve the functionality by forking and adding more/other functions and features.
+Commits: The pattern supports that functionality was added up to version 1.0 release and then the other commits are for maintenance
+Issues: Indicates that the quality of the product is quite poor and the number of issues indicates that there is quite a lot of functionality in the component, making it it more diverse than several of the other components in this analysis.
+
+Macro observations:
+	- More diverse functionality than other components on our list here.
+SUMMARY:
+Stability:	High - Gone through initial development phase, now maintained frequently
+Functionality:	High - Many forks and issues. A lot of functionality that many want
+Supportability:	High - Frequent maintenance that is slowly decipating
+Longevity:	Medium - Maintenance is decipating!
+Gen. Quality:	Low - A lot of issues
+Predictability:	Low - A lot of issues and declining interest, could be cause for concern
+————————
+
+Flatpickr
+Tags: Seems to be in the works up towards version 1.0. The project has gotten a lot of attention and many people want to contribute, sky-rocketing the number of issues. Version 1.0 is probably approaching and will be quite buggy but will by the community be fixed over the next 6 to 12 months. Hence, the component is a bad pick today but good in the ned of 2019 (probably).
+Forks: People have seen the potential of the component but don’t like the direction of the project and aim to develop it in other ways. Thus the multiple forks that probably aim to push the component in various directions.
+Commits: Solid! Well maintained and updated but perhaps quite scattered when compared to the issue count. Could indicate that the direction of the project is uncertain, also what the core functionality of the component is. This statement is supported by the issue count.
+Issues: Rocketing, probably because of the lack of a proper goal for the project. The forks also indicate this trend.
+
+Macro observations:
+	- Indicates a successful but immature and high-risk project I think.
+
+SUMMARY:
+Stability:	Low - Many issues and the direction of the project seems uncertain
+Functionality:	High - A lot of features but many are faulty (many issues and forks)
+Supportability:	Medium - Development is focused on development, not maintenance
+Longevity:	High - Huge team (25), will likely maintain product after release of 1.0
+Gen. Quality:	Medium - At the moment, better in a year
+Predictability:	Medium - Nice community COULD result in a good product but uncertain
+————————————
+
+G11n-pipeline
+Tags: Seems like a project that has been under development for some time with some nice functionality. Kept a stable development community and finally reached a stable version 1 that caught peoples interest. Thus, more functionality was added and more versions 1.1 to 1.10 were released. However, with each release more functionality was added and more issues reported. Thus, the product is still unstable.
+Forks: Other developers caught the value of the component early and forked it to create their own, perhaps rivaling versions (worth looking into, since there might be better versions available with similar functionality!)
+Commits: Stable community that, correlated with faults, try to address faults during development but in this case, since the component is immature that number of issues added are greater that issues removed.
+Issues: Steady increase, indicating that the functionality is immature but that there is still potential in the component and that there are many that want said functionality.
+
+Macro observations:
+	- This fork pattern could indicate better rival components!
+
+SUMMARY:
+Stability:	Low - Unstable version and many functions being added (many issues)
+Functionality:	High - A lot of functionality that is valuable
+Supportability: low - Few contributers and long issues closing time
+Longevity:	Medium - Component still under construction, uncertain future
+Gen. Quality:	Low - Many issues, spread functionality and long issue resolution time
+Predictability:	Low - Difficult to tell where the component is headed (Good or bad?)
+——————————————
+
+Gettext-parser
+Tags: Stable releases, the project is stable in terms of functionality but new functions/features are continuously added. This adds some insecurity but also potential.
+Forks: This strengthens the potential of the components as the forks indicate that people have seen the value of the component and forked it to create new components based on its core functionality.
+Commits: Stable throughout but it seems that some misstakes may have been made in the middle when looking at the number of commits contra issues. The project has never really recovered either.
+Issues: The project seems to have nice functionality but something has gone bad in the project and the quality may forever be comprimised. Instead, it may be suitable to look at one of the forked versions of the component, especially since issue resolution time is 2 months.
+
+Macro observations:
+	- Example stable project with problems!
+	- Uncertain future, especially when looking at declining number of commits
+	- Many forks indicate other variants of the component that could be better!
+
+SUMMARY:
+Stability:	Medium - Average size component with many issues and forks
+Functionality:	High - Good functionality, many forks
+Supportability:	Medium - Many developers (12) but poor issue response time
+Longevity:	Low - Number of issues is going up but commits down. Bad sign!
+Gen. Quality:	Low - Many issues and they are not going down
+Predictability:	Low - Uncertain future, could be more suitable to look at forked variants
+—————————————————
+
+is-date-object
+Tags: Probably a dead project. People had a good idea but did not follow through or lost interest.
+Forks: Someone saw the potential, probably internally in the project, and made a fork. Could be better to look at the fork than this project to get a good component.
+Commits: Some work followed by bug fixes. Also the project seems quite early in its life-cycle due to the low number of commits and tags.
+Issues: Some issues but they were resolved. One could image the next commit to fix the issues that are currently open.
+
+Macro observations:
+	- Example of a young project that is very uncertain where it will go. Hit or miss?
+
+SUMMARY:
+Stability:	Low - Young project with issues
+Functionality:	Low - Few subscribers, forks, etc.
+Supportability:	Low - Few developers, long issue responsetime
+Longevity:	Low - Difficult to tell, needs to take off! Soon! or it will die.
+Gen. Quality:	Medium - Small project, few issues.
+Predictability:	Low - Difficult to tell where it will go. Would not choose it now.
+——————————————
+
+Is-extendable
+Tags: Seems like a long-running project that never took off. A single developer did the base functionality and then the project regained some interst some years later. Perhaps the core developer saw the need for the functionality again and started things up.
+Forks: This may explain the fork, the first developer discussed the functionality and either forked it or someone else did, saw the potential and continued to work.
+Commits: Follows the reasoning above, single developer doing some initial work and then coming back to the software to update it.
+Issues: Few and don’t give much information.
+
+Macro observations:
+	- Potentiall intersting project after a few years, but typical baby project
+
+SUMMARY:
+Stability:	Low - Very early in development
+Functionality:	Low - Probably very specific
+Supportability:	Low - few developers
+Longevity:	Low - Uncertain future, little development
+Gen. Quality:	Medium - Limited functionality and few issues
+Predictability:	Low - No idea where the component will go
+———————————————
+
+Luxon: 
+Tags: Project that was under devevlopment for quite some time before first release, indicates a larger set of functions and a larger development crew, also indicated by number of commits, issues, tags, etc. Judging from the tags alone the component is still not in a version 1.0 phase but is getting there based on the decline in issues.
+Forks: The functionality has been under development for quite some time but only now reached public interest and therefore people have started forking it to make variants. Could be intersting to check these out before choosing this particular component although it may be the original.
+Commits: Are stable and judging from commits and tags the projects reached a semi-stable version at some point (e.g. a v1.0) and the software is now on version 1.3. Where 1.1 to 1.3 were issue/bug fixes. Could indicate a “mature” and stable product where emphasis will be on maintenance and support for the considerable future.
+Issues: Peaked and are in decline, supports above argumentation that the component is stable.
+Macro observations:
+	- Negative derivate in issue together with high sum of tags could indicate v 1.0.
+
+SUMMARY:
+Stability:	High - Stable functionality, focus on maintenance
+Functionality:	High - Many commits, issues, etc. wide set of functions
+Supportability:	High - Semi-low issue reponse time: 15 days.
+Longevity:	High - Many commits and decent community
+Gen. Quality:	Medium - Many issues but getting sorted
+Predictability:	Medium - Maintenance isn’t fun, soon new functionality will be added
+—————————————————
+
+Moment:
+Tags: Long-running project, probably in version 2.0+, indicating stability.
+Forks: Few forks, could indicate specialized functionality or that the component is so good that there is no need to develop it further in a specific direction. Alternatively the number of issues reaches a record high when the forks are created which could have meant that some developers had enough and decideded to fix those issues. Thus, the component has low quality.
+Commits: Frequent, consistent commits throughout the components lifecycle.
+Issues: Many issues, continue to grow over time. Could indicate a lot of new functionality that is poorly added. Could cause issues over time!
+
+Macro observations:
+	- Example of project growing in functionality but not quality over time
+	- Focus on functionality, issues for the future, perhaps better to check forks?
+
+SUMMARY:
+Stability:	Low - a lot of issues added with new functions
+Functionality:	High - a lot of functionality with many issues
+Supportability:	Low - Low issue response time, focus on functionality
+Longevity:	Low - More emphasis on maintenance required
+Gen. Quality:	Low - Many issues and they continue to grow
+Predictability:	Low - The issues and functionality grow, better to check stable forks
+——————————————————
+
+Pofile
+Tags:A year of development until tag 0.1 and then the project has slowly been growing towards version 1.0. The project quickly got recognition however through the forks, implying nice functionality but people wanted to use it in different ways, once more indicated by the forks.
+Forks: Nice but diverse need for the project, not good for predictability!
+Commits: Semi-solid community invested in the project adding functionality and dealing with the few issues associated with it. Still the issues grow in an alarming rate! Hence, emphasis on functionality and not quality!
+Issues: Growing steadily.
+
+Macro observations:
+	- Example project where developers have a good idea but not how to realize it
+	- Users recognize idea and push in different directions
+	- Need to look at variants of component before taking decision?
+
+SUMMARY:
+Stability:	Low - growing issues, inconsistent commits
+Functionality:	High - Many are interested but in different ways, inconstency!
+Supportability:	Low - 11 day closing time of issues and divers functionality
+Longevity:	Low - Better to check forks to find more stable version
+Gen. Quality:	Low - Issues continue to grow with each commit
+Predictability:	Low - Where is this component headed? No common goal?
+———————————————
+
+Postgres-date
+Tags: Project was developed by one person (correlation between tags and commits) and had some nice functionality (Forks) but the developer had enough at some point and other took over by forking the projekt. Thus indicating nice funtionality but it is supportive to other functionality/features and requires further development.
+Forks: Only indicate the value of the original project, could have become better.
+Commits: The project is dead
+Issues: They are fixed
+
+Macro observations:
+	- Example of project where developers had a vision, fulfilled it, others took over
+
+SUMMARY:
+Stability:	High - This is what it is
+Functionality:	High - This does what it does really well
+Supportability:	Low - No one will support it, check forks for support
+Longevity:	High - This is stable, won’t go anywhere
+Gen. Quality:	High - No issues
+Predictability:	High - Won’t become anything else
+——————————————
+
+react-day-picker
+Tags: Project under development a long time before reaching “a stable version”, means that it is probably govenered by a person or team that know what quality means. This can also be determined by the curve of the issues that go down quite a bit before the initial version launch. The incresase in in issues just before the first tag can be because of multiple things but likely just because the developers had to do last minute tweaks?
+Forks: The project has been in the making for many years but it’s only in the end that developers have seen the benefits and started to branch off to create their own versions. This, coupled with the rise in issues indicate the value of investigating 
+Commits: Contunuous commits throughout the project with an increase in issues, indicates a lack of a goal and a spread in functionality that might have, later, resulted in the forks.
+Issues: They continue to grow, however this may be due to larger commits in functionality that can have affected aspects of the component. Thus, important to look into also what has been updated and why. New functionality is new, but if it has affected previously functional functionality that is bad.
+
+Macro observations:
+SUMMARY:
+	- Case of a mature project where users report more issues over time
+	- Problems because old functionality is changed?
+	- Problems in new functionality?
+
+Stability:	Low - Many issues over time
+Functionality:	High - Many functions, attractive ones (forks)
+Supportability:	Low - Long time to close issues
+Longevity:	Low - Seems that issues are growing, better to check forked versions?
+Gen. Quality:	Medium - Many issues but broad functionality
+Predictability: Medium - Seems to be a mature component?
+——————————————
+
+Time-stamp:
+Tags: Early to launch version v0.1 and early to reach 1.0 followed by maintenance over time.
+Forks: Reasonable functionality due to the forks, got an upswing after some issue in the mid of the project.
+Commits: Seems to be developed by a single developer (look at the graph then in statistics and found: that I was incorrect. Were multiple developers). Regardless, the commits are concentrated so increments are quite large, implying leaps in functionality and/or quality that make quality assessment difficult. A more continuous implementation is preferred.
+Issues: The number of issues are not many and handled in the project, implying suitable quality.
+
+Macro observations:
+	- Strange project! Where does it start and end?
+	- Misassumption on number of developers since commits are grouped! Dangerous!
+	- Commits vs contributers must be visualized! Different colors for developers?
+
+SUMMARY:
+Stability:	Medium - Some forks that indicate branching functionality
+Functionality:	Medium - Some forks, but overall stable
+Supportability:	Medium - Issues are taken care off
+Longevity:	Medium - Quality assured over time
+Gen. Quality:	Medium - Some issues, few, but overall stable
+Predictability:	High - Not a premium product but maintained and sorted over time
+——————————
+
+to-regex-range
+Tags: Slow started project that has reached a stable state and then incrementally added a suitable amount of functionality per release to improve the component’s usability.
+Forks: Only in the later parts where other developers may have seen speciifc use of the component.
+Commits: Stable over time, few but stable, indicating that user feedback is considered but at the same time a worry as the commits align with tags which indicate few developers and potentially infrequent releases as the project is dependent on one or a few developers (in this case 4 but probably 1 or 2 driving developers)-
+Issues: Increase over time but still very few, not an issue.
+
+Macro observations:
+	- Example of early project with few developers. Has potential but could fail.
+
+SUMMARY:
+Stability:	Medium - Currently stable but difficult to judge
+Functionality:	Medium - Enough for forks to be created.
+Supportability:	Low - Few developers and a month response time!
+Longevity:	Medium - reasonable response.
+Gen. Quality:	High - few user issues reported
+Predictability:	Medium - difficult to tell where the component is headed.
+————————————
+
+Vali-date
+Tags: Dead project, started and then died.
+Forks: No one knows this exist, implying functionality that exists elsewhere, not intersting. 
+Commits: Someone did an effort and then stopped.
+Issues: Someone found the component many years later, realised it had some value, tried it out and reported the issue. Chances are the project is still dead.
+
+Macro observations:
+	- Dead projects are dead! WHEN should they be proposed as suitable components?
+SUMMARY:
+Stability:	High - Unlikely the project will change
+Functionality:	Low - Very niche since few people have found it
+Supportability:	Low - no updates
+Longevity:	Low - No chance of updates coming
+Gen. Quality:	Low - Issue reported 2 years in
+Predictability:	High - Will probably remain low quality.
