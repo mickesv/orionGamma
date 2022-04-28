@@ -23,7 +23,7 @@
         "superagent": ">=3.7.0",
         "mime": ">=1.4.1",
     "api-npm": "^1.0.0",
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "body-parser": "~1.18.2",
     "chart.js": "^2.7.2",
     "cookie-parser": "~1.4.3",
